@@ -1,7 +1,10 @@
 .CalendarStyle{
-    
+  
+  color: rgb(111, 111, 111);  
+   
     
 }
+
 
 
 .rdrDateRangePickerWrapper {
@@ -16,4 +19,43 @@
 }
 
 
+.react-modal-overlay{
+    background: rgba(0,0,0, 0.8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.react-modal-content{
+    width: 100%;
+    max-width: 600px;
+    background: #ffffff;
+    padding: 1rem;
+    position: relative;
+    border-radius: 0.25rem;
+}
+
+.rdrCalendarWrapper {
+    box-sizing: border-box;
+    background: #ffffff;
+    display: inline-flex;
+    flex-direction: column;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    height: 300px;
+    border-radius: 0.5rem;
+}
+
+.Calendar{
+    
+}
 

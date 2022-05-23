@@ -15,7 +15,7 @@ export function Profile({showProfileData = true}: ShowProfileProps){
                     <Text color="gray.300" fontSize="small">tmrafinha4@gmail.com</Text>
                 </Box>
             )}        
-            <Avatar size="md" name="Rafael Amaro" src='https://github.com/amdrafa.png' />
+            <Avatar size="md" name="Rafael Amaro" src='' bg="green.600"/>
         </Flex>
     );
 }
