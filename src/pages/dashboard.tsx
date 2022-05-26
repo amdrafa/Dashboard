@@ -1,7 +1,9 @@
-import { Flex, SimpleGrid, Box, Text, theme } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import dynamic from "next/dynamic";
+import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { Pagination } from "../components/Pagination";
 
 const Chart = dynamic(() => import('react-apexcharts'), {
     ssr: false,
@@ -62,6 +64,12 @@ const series = [
 ];
 
 export default function Dashboard(){
+
+    const isWideVersioon = useBreakpointValue({
+        base: false,
+        lg: true,
+    })
+
     return (
         <div>
             <Flex direction="column" h="100vh">
@@ -70,7 +78,7 @@ export default function Dashboard(){
                 <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
                     <Sidebar />
 
-                    <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start">
+                    <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start" mt="6">
                         <Box
                         p={["6", "8"]}
                         bg="gray.800"
@@ -97,7 +105,16 @@ export default function Dashboard(){
                     </SimpleGrid>
                 </Flex>
 
+                
+
+
+
+
+            
             </Flex>
+
+
+            
             
         </div>
     )   

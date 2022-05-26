@@ -1,4 +1,4 @@
-import { Flex, Button, Stack } from '@chakra-ui/react';
+import { Flex, Button, Stack, Icon } from '@chakra-ui/react';
 import { Input } from '../components/Form/input';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
@@ -6,6 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { api } from '../services/axios';
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
+import { signIn as githubSignIn, useSession } from 'next-auth/react'
+import { RiGithubLine } from 'react-icons/ri';
 
 type SignInFormData = {
   email: string;
@@ -19,6 +21,9 @@ const SignInFormSchema = yup.object().shape({
 
 export default function Home() {
 
+  const {data: session} = useSession()
+
+  console.log(session)
 
   const { signIn } = useContext(LoginContext)
    
@@ -29,12 +34,15 @@ export default function Home() {
 
   const {errors} = formState
 
-  const handleSignin:SubmitHandler<SignInFormData> = async ({ email, password }) => {
+  const handleSignin:SubmitHandler<SignInFormData> = ({ email, password }) => {
 
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    
+
     
     signIn({email, password})
 
+    
   }
 
   return (
@@ -69,8 +77,7 @@ export default function Home() {
           />
           
         </Stack>
-        
-
+      
         <Button 
         type='submit' 
         mt="6" 
@@ -81,6 +88,21 @@ export default function Home() {
           Enter
         </Button>
 
+        <Button 
+        type='submit' 
+        mt="6" 
+        colorScheme="purple"
+        size="lg"
+        onClick={() => githubSignIn('github', {
+          callbackUrl: `${window.location.origin}/dashboard`
+        })}
+        
+        >
+
+          <Icon mr="1" as={RiGithubLine} fontSize="25"/>
+          Sign in with github
+          
+        </Button>
       </Flex>
 
     </Flex>

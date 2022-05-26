@@ -5,12 +5,13 @@ import { SidebarDrawerProvider } from '../contexts/SidebarDrawerContext'
 import { makeServer } from '../services/mirage'
 import './calendar.css'
 import { LoginContextProvider } from '../contexts/LoginContext'
-
+import { SessionProvider as NextAuthProvider } from 'next-auth/react'
 
 function MyApp({ Component, pageProps }: AppProps) {
   
     return (
-      <LoginContextProvider>
+      <NextAuthProvider session={pageProps.session}>
+        <LoginContextProvider>
         <ChakraProvider theme={theme}>
           <SidebarDrawerProvider>
             <Component {...pageProps} />
@@ -18,6 +19,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           
         </ChakraProvider>
       </LoginContextProvider>
+      </NextAuthProvider>
+      
       
     )
   

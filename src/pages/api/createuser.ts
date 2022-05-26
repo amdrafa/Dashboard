@@ -6,9 +6,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     
     if(request.method === 'POST'){
 
-        const {data: email, password} = request.body
+        const {data: email, password, user} = request.body
 
-        console.log("heyyyy, new user registered", email, password)
+        console.log("heyyyy, tried to register someone", email, password)
         
         try{
             await fauna.query(

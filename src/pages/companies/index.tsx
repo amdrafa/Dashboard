@@ -2,12 +2,11 @@ import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead
 import Link from "next/link";
 import { useEffect } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
-import { FiTrash } from "react-icons/fi";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
 
-export default function UserList(){
+export default function CompanyList(){
 
     const isWideVersioon = useBreakpointValue({
         base: false,
@@ -27,10 +26,18 @@ export default function UserList(){
 
                 <Box flex='1' borderRadius={8} bg='gray.800' p='8'>
                     <Flex mb='8' justify='space-between' align='center'>
-                        <Heading size='lg' fontWeight='normal'>Users list</Heading>
+                        <Heading size='lg' fontWeight='normal'>Company list</Heading>
 
-                        <Link href="/users/create" passHref>
-                            <Text>A search box comes here</Text>
+                        <Link href="/companies/create" passHref>
+                            <Button 
+                            as='a' 
+                            size="sm" 
+                            fontSize='sm' 
+                            colorScheme='blue'
+                            leftIcon={<Icon as={RiAddLine} fontSize="20"/>}
+                            >
+                                Add a new company
+                            </Button>
                         </Link>
                     </Flex>
 
@@ -38,50 +45,53 @@ export default function UserList(){
                         <Thead>
                             <Tr>
                                 <Th px={["4","4","6"]} color="gray.300" width="">
-                                    <Text>User</Text>
+                                    <Text>Company</Text>
                                 </Th>
-                                <Th>Company</Th>
+
+                                <Th px={["4","4","6"]} width="">
+                                    <Text>Responsable</Text>
+                                </Th>
+                                
+                                
+                                <Th>CNPJ</Th>
+                                
                                 {isWideVersioon && <Th>Register date</Th>}
                                 <Th w="8"></Th>
+                                
                             </Tr>
                         </Thead>
                         <Tbody>
                             <Tr>
                                 <Td px={["4","4","6"]}>
-                                <Box>
+                                    <Text>Bosch</Text>
+                                </Td>
+                                <Td>
+                                    <Box>
                                         <Text fontWeight="bold">Rafael Amaro</Text>
                                         <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
                                     </Box>
                                 </Td>
-                                <Td>
-                                    <Text>asasdasd</Text>
-                                </Td>
+                                {isWideVersioon && <Td>000000000-00</Td> }
+
                                 {isWideVersioon && <Td>18 de maio, 2022</Td> }
-                                <Td 
-                                display="flex"
-                                justifyContent='right'
-                                mt="2"
-                                >
-                                    <Button 
-                                        as='a' 
-                                        size="sm" 
-                                        fontSize='sm' 
-                                        colorScheme='red'
-                                        pl="3"
-                                        pr='1'
-                                        leftIcon={<Icon as={FiTrash} fontSize="16"/>}
-                                        >
-                                            
+
+                                <Td>
+                                <Button 
+                                    as='a' 
+                                    size="sm" 
+                                    fontSize='sm' 
+                                    colorScheme='gray'
+                                    color="gray.900"
+                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
+                                    >
+                                        Edit
                                     </Button>
                                 </Td>
                             </Tr>
 
                             <Tr>
                                 <Td px={["4","4","6"]}>
-                                <Box>
-                                        <Text fontWeight="bold">Rafael Amaro</Text>
-                                        <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
-                                    </Box>
+                                    <Text>Bosch</Text>
                                 </Td>
                                 <Td>
                                     <Box>
@@ -89,32 +99,30 @@ export default function UserList(){
                                         <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
                                     </Box>
                                 </Td>
+                                
+
+                                
+                                {isWideVersioon && <Td>000000000-00</Td> }
                                 {isWideVersioon && <Td>18 de maio, 2022</Td> }
-                                <Td 
-                                display="flex"
-                                justifyContent='right'
-                                mt="2"
-                                >
-                                    <Button 
-                                        as='a' 
-                                        size="sm" 
-                                        fontSize='sm' 
-                                        colorScheme='red'
-                                        pl="3"
-                                        pr='1'
-                                        leftIcon={<Icon as={FiTrash} fontSize="16"/>}
-                                        >
-                                            
+
+                                <Td>
+                                <Button 
+                                    as='a' 
+                                    size="sm" 
+                                    fontSize='sm' 
+                                    colorScheme='gray'
+                                    color="gray.900"
+                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
+                                    >
+                                        Edit
                                     </Button>
                                 </Td>
+                                
                             </Tr>
 
                             <Tr>
                                 <Td px='6'>
-                                <Box>
-                                        <Text fontWeight="bold">Rafael Amaro</Text>
-                                        <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
-                                    </Box>
+                                    <Text>Bosch</Text>
                                 </Td>
                                 <Td>
                                     <Box>
@@ -122,22 +130,19 @@ export default function UserList(){
                                         <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
                                     </Box>
                                 </Td>
+                                {isWideVersioon && <Td>000000000-00</Td> }
                                 {isWideVersioon && <Td>18 de maio, 2022</Td> }
-                                <Td 
-                                display="flex"
-                                justifyContent='right'
-                                mt="2"
-                                >
-                                    <Button 
-                                        as='a' 
-                                        size="sm" 
-                                        fontSize='sm' 
-                                        colorScheme='red'
-                                        pl="3"
-                                        pr='1'
-                                        leftIcon={<Icon as={FiTrash} fontSize="16"/>}
-                                        >
-                                            
+
+                                <Td>
+                                <Button 
+                                    as='a' 
+                                    size="sm" 
+                                    fontSize='sm' 
+                                    colorScheme='gray'
+                                    color="gray.900"
+                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
+                                    >
+                                        Edit
                                     </Button>
                                 </Td>
                             </Tr>

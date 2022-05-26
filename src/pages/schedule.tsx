@@ -17,17 +17,21 @@ import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
 import { useContext, useState } from "react";
-import carImg from "../../public/assets/pista.png";
 import { Calendar } from "react-date-range";
 import { RiCalendarLine, RiCarLine, RiCloseCircleLine } from "react-icons/ri";
 import { RiRoadMapLine } from "react-icons/ri";
 import Modal from "react-modal";
 import { bg } from "date-fns/locale";
 import { LoginContext } from "../contexts/LoginContext";
+import { api } from "../services/axios";
+import Router from 'next/router'
+
 
 export default function Schedule() {
 
   const {user} = useContext(LoginContext)
+
+  console.log(user + '   schedule page  ' + user)
 
   const [speedway, setSpeedway] = useState('')
   const [vehicle, setVehicle] = useState('')
@@ -55,12 +59,19 @@ export default function Schedule() {
     key: "selection",
   };
 
+  
 
+  console.log(startDate, endDate, speedway, vehicle, user);
 
-  console.log(startDate, endDate, speedway, vehicle);
+  async function CreateSchedule(){
+
+    
+    Router.push('/dashboard')
+    await api.post('scheduletime', {startDate, endDate, speedway, vehicle, user})
+  }
 
   return (
-    <Box as="form">
+    <Box as="form" onSubmit={CreateSchedule}>
       <Flex direction="column" h="100vh">
         <Modal
           isOpen={isModalOpen}
@@ -88,7 +99,7 @@ export default function Schedule() {
               <Button onClick={handleCloseModal} bg="red.600">Cancel</Button>
               <Text color="gray.600">15 de janeiro, 2022</Text> 
               
-              <Button bg="green.600">Confirm</Button>
+              <Button type="submit" onClick={CreateSchedule} bg="green.600">Confirm</Button>
             </Box>
           </SimpleGrid>
         </Modal>
@@ -154,6 +165,8 @@ export default function Schedule() {
                 </Box>
               </SimpleGrid>
 
+              
+
               <Flex mb="7">
                 <Checkbox mr="2"/>
                 <Text color="gray.200" fontSize="15">
@@ -164,7 +177,7 @@ export default function Schedule() {
               <Flex justify="space-between">
               <Button
                   
-                  colorScheme="whiteAlpha"
+                  colorScheme="red"
                   borderRadius={8}
                   w="30"
                   display="flex"
@@ -196,11 +209,14 @@ export default function Schedule() {
             
           </VStack>
           
-          
+          <Image ml="20" boxSize='400px' src='/images/pista.png' alt='Dan Abramov'/>
           
         </Flex>
+
+        
+
         <Flex justifyContent="center" pl="40" w="100%" mt="20">
-          <Text>carrousel here...</Text>
+          
         </Flex>
         
       </Flex>
