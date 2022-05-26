@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup' 
 import { api } from "../../services/axios";
+import Router from "next/router";
 
 type CreateUserFormData = {
     company: string;
@@ -34,7 +35,9 @@ export default function CreateCompany(){
     const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email }) => {
         await new Promise(resolve => setTimeout(resolve, 1000))
         console.log(company, cnpj, responsable_name, email)
+        Router.push('/companies')
         api.post('createcompany', {data: company, cnpj, responsable_name, email})
+        
     }
 
     return (
