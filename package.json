@@ -30,6 +30,7 @@
     "react-hook-form": "^7.31.1",
     "react-icons": "^4.3.1",
     "react-modal": "^3.15.1",
+    "secret-key": "^1.5.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {

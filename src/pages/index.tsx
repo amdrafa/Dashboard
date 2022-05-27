@@ -1,4 +1,4 @@
-import { Flex, Button, Stack, Icon } from '@chakra-ui/react';
+import { Flex, Button, Stack, Icon, Divider, Text } from '@chakra-ui/react';
 import { Input } from '../components/Form/input';
 import { SubmitHandler, useForm } from 'react-hook-form'
 import * as yup from 'yup';
@@ -7,7 +7,7 @@ import { api } from '../services/axios';
 import { useContext } from 'react';
 import { LoginContext } from '../contexts/LoginContext';
 import { signIn as githubSignIn, useSession } from 'next-auth/react'
-import { RiGithubLine } from 'react-icons/ri';
+import { RiGithubFill, RiGithubLine, RiGoogleFill, RiGoogleLine, RiLinkedinFill } from 'react-icons/ri';
 
 type SignInFormData = {
   email: string;
@@ -57,6 +57,7 @@ export default function Home() {
       borderRadius={8}
       flexDir="column"
       onSubmit={handleSubmit(handleSignin)}
+      mr="10"
       >
         <Stack spacing={4}>
 
@@ -80,31 +81,94 @@ export default function Home() {
       
         <Button 
         type='submit' 
-        mt="6" 
-        colorScheme="green"
+        mt="8" 
+        colorScheme="twitter"
         size="lg"
         isLoading={formState.isSubmitting}
         >
           Enter
         </Button>
 
-        <Button 
-        type='submit' 
-        mt="6" 
-        colorScheme="purple"
-        size="lg"
-        onClick={() => githubSignIn('github', {
-          callbackUrl: `${window.location.origin}/dashboard`
-        })}
-        
-        >
+        <Flex display="grid" alignItems="center" justifyContent="center" mt="8">
+          <Text >Already have access?</Text>
+        </Flex>
+        <Flex display="grid" alignItems="center" justifyContent="center">
+          <Text color="whiteAlpha.900">Register now!</Text>
+        </Flex>
+      </Flex>
 
-          <Icon mr="1" as={RiGithubLine} fontSize="25"/>
-          Sign in with github
+      <Divider orientation='vertical' height="410" opacity="0.1" ml="70px" mr="70px"/>
+
+      <Flex
+      w='100%' 
+      maxW={360}
+      bg="gray.800"
+      p="8"
+      py="44px"
+      ml="10"
+      borderRadius={8}
+      flexDir="column"
+      >
+
+      <Text fontSize="30" fontWeight="bold" mt={-2}>Don't you want to register?</Text>
+        <Stack spacing="10px">
+
           
-        </Button>
+
+          <Text fontSize="15" mb="5" color="gray.300">Sign in with your social media.</Text>
+
+          <Flex display="grid" alignItems="center">
+            <Button 
+            type='submit'  
+            colorScheme="purple"
+            size="lg"
+            
+            >
+              <Icon mr="1" as={RiGithubFill} fontSize="25"/>
+              Github
+            </Button>
+          </Flex>
+
+          <Flex display="grid" alignItems="center">
+            <Button 
+            type='submit' 
+            colorScheme="messenger"
+            size="lg"
+            >
+              <Icon mr="1" as={RiLinkedinFill} mt="-1" fontSize="25"/>
+              Linkedin
+            </Button>
+          </Flex>
+         
+          
+          <Flex display="grid" alignItems="center">
+            <Button 
+              type='submit' 
+              colorScheme="whatsapp"
+              size="lg"
+              onClick={() => githubSignIn('github', {
+                callbackUrl: `${window.location.origin}/dashboard`
+              })}
+              
+            >
+
+              <Icon mr="1" as={RiGoogleFill} fontSize="25"/>
+              Google
+            
+            </Button>
+          </Flex>
+          
+        </Stack>
+      
+        
+
+        
       </Flex>
 
     </Flex>
+
+    
+
+    
   )
 }
