@@ -1,10 +1,31 @@
 import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue } from "@chakra-ui/react";
+import { query as q } from 'faunadb'
+import { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useEffect } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
+import { fauna } from "../../services/fauna";
+
+
+interface companyProps {
+
+    data: {
+        ref: string;
+        ts: string;
+        data: {
+            company: string;
+            cnpj: string;
+            responsable_name: string;
+            email: string;
+            companySecretKey: string;aa
+        }
+    }
+
+  }
+
 
 export default function CompanyList(){
 
@@ -155,4 +176,25 @@ export default function CompanyList(){
             </Flex>
         </Box>
     );
+}
+
+
+export const getServerSideProps: GetServerSideProps = async () => {
+
+    const companies = await fauna.query<companyProps>(
+        q.Map(
+            q.Paginate(
+                q.Match(q.Index('all_companies'))
+            ),
+            q.Lambda(x => q.Get(x))
+        )
+    ).then((ret) => console.log(ret.data))
+
+    console.log()
+
+    return {
+        props: {
+            
+        }
+    }
 }

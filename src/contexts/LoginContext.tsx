@@ -38,7 +38,7 @@ export function LoginContextProvider({children}){
 
             setUser({email, name: 'rafael'})
         
-            Router.push('/schedule')
+            Router.push('/dashboard')
             console.log(user.email + ' that worked' + user.name)
             await api.post('createuser', {data: email, password})
             

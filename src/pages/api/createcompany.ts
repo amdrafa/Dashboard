@@ -36,6 +36,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         
         try{
 
+            
+
             await fauna.query(
                 q.Create(
                     q.Collection('companies'),
