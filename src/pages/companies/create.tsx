@@ -33,10 +33,12 @@ export default function CreateCompany(){
     const {errors} = formState
 
     const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email }) => {
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        
         console.log(company, cnpj, responsable_name, email)
         Router.push('/companies')
-        api.post('createcompany', {data: company, cnpj, responsable_name, email})
+        await api.post('createcompany', {data: company, cnpj, responsable_name, email})
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        
         
     }
 

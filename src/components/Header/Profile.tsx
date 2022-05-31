@@ -9,7 +9,7 @@ export function Profile({showProfileData = true}: ShowProfileProps){
 
     const {data: session} = useSession()
 
-    console.log(session + "saddas")
+    
 
     return session? (
         <Flex

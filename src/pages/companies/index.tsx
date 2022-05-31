@@ -1,200 +1,160 @@
-import { Box, Button, Checkbox, Flex, Heading, Icon, Table, Tbody, Td, Th, Thead, Tr, Text, useBreakpointValue } from "@chakra-ui/react";
-import { query as q } from 'faunadb'
+import {
+  Box,
+  Button,
+  Checkbox,
+  Flex,
+  Heading,
+  Icon,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  Text,
+  useBreakpointValue,
+  Spinner,
+} from "@chakra-ui/react";
+import { query as q } from "faunadb";
 import { GetServerSideProps } from "next";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { Header } from "../../components/Header";
 import { Pagination } from "../../components/Pagination";
 import { Sidebar } from "../../components/Sidebar";
+import { api } from "../../services/axios";
 import { fauna } from "../../services/fauna";
+import { useQuery } from "react-query";
 
-
-interface companyProps {
-
-    data: {
-        ref: string;
-        ts: string;
-        data: {
-            company: string;
-            cnpj: string;
-            responsable_name: string;
-            email: string;
-            companySecretKey: string;aa
-        }
-    }
-
-  }
-
-
-export default function CompanyList(){
-
-    const isWideVersioon = useBreakpointValue({
-        base: false,
-        lg: true,
-    })
-
-
-    
-
-    return (
-        
-        <Box>
-            <Header />
-
-            <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-                <Sidebar />
-
-                <Box flex='1' borderRadius={8} bg='gray.800' p='8'>
-                    <Flex mb='8' justify='space-between' align='center'>
-                        <Heading size='lg' fontWeight='normal'>Company list</Heading>
-
-                        <Link href="/companies/create" passHref>
-                            <Button 
-                            as='a' 
-                            size="sm" 
-                            fontSize='sm' 
-                            colorScheme='blue'
-                            leftIcon={<Icon as={RiAddLine} fontSize="20"/>}
-                            >
-                                Add a new company
-                            </Button>
-                        </Link>
-                    </Flex>
-
-                    <Table colorScheme="whiteAlpha">
-                        <Thead>
-                            <Tr>
-                                <Th px={["4","4","6"]} color="gray.300" width="">
-                                    <Text>Company</Text>
-                                </Th>
-
-                                <Th px={["4","4","6"]} width="">
-                                    <Text>Responsable</Text>
-                                </Th>
-                                
-                                
-                                <Th>CNPJ</Th>
-                                
-                                {isWideVersioon && <Th>Register date</Th>}
-                                <Th w="8"></Th>
-                                
-                            </Tr>
-                        </Thead>
-                        <Tbody>
-                            <Tr>
-                                <Td px={["4","4","6"]}>
-                                    <Text>Bosch</Text>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Rafael Amaro</Text>
-                                        <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                {isWideVersioon && <Td>000000000-00</Td> }
-
-                                {isWideVersioon && <Td>18 de maio, 2022</Td> }
-
-                                <Td>
-                                <Button 
-                                    as='a' 
-                                    size="sm" 
-                                    fontSize='sm' 
-                                    colorScheme='gray'
-                                    color="gray.900"
-                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
-                                    >
-                                        Edit
-                                    </Button>
-                                </Td>
-                            </Tr>
-
-                            <Tr>
-                                <Td px={["4","4","6"]}>
-                                    <Text>Bosch</Text>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Rafael Amaro</Text>
-                                        <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                
-
-                                
-                                {isWideVersioon && <Td>000000000-00</Td> }
-                                {isWideVersioon && <Td>18 de maio, 2022</Td> }
-
-                                <Td>
-                                <Button 
-                                    as='a' 
-                                    size="sm" 
-                                    fontSize='sm' 
-                                    colorScheme='gray'
-                                    color="gray.900"
-                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
-                                    >
-                                        Edit
-                                    </Button>
-                                </Td>
-                                
-                            </Tr>
-
-                            <Tr>
-                                <Td px='6'>
-                                    <Text>Bosch</Text>
-                                </Td>
-                                <Td>
-                                    <Box>
-                                        <Text fontWeight="bold">Rafael Amaro</Text>
-                                        <Text fontSize="sm" color="gray.300">tmrafinha4@gmail.com</Text>
-                                    </Box>
-                                </Td>
-                                {isWideVersioon && <Td>000000000-00</Td> }
-                                {isWideVersioon && <Td>18 de maio, 2022</Td> }
-
-                                <Td>
-                                <Button 
-                                    as='a' 
-                                    size="sm" 
-                                    fontSize='sm' 
-                                    colorScheme='gray'
-                                    color="gray.900"
-                                    leftIcon={<Icon as={RiPencilLine} fontSize="16"/>}
-                                    >
-                                        Edit
-                                    </Button>
-                                </Td>
-                            </Tr>
-                        </Tbody>
-                    </Table>
-                    <Pagination />
-                    
-
-                </Box>
-            </Flex>
-        </Box>
-    );
+interface companyDataProps {
+  data: companyProps;
+  ref: string;
+  ts: number;
 }
 
+interface companyProps {
+  company: string;
+  cnpj: string;
+  responsable_name: string;
+  email: string;
+  companySecretKey: string;
+  createdAt: string;
+}
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export default function CompanyList() {
+  const isWideVersioon = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
 
-    const companies = await fauna.query<companyProps>(
-        q.Map(
-            q.Paginate(
-                q.Match(q.Index('all_companies'))
-            ),
-            q.Lambda(x => q.Get(x))
-        )
-    ).then((ret) => console.log(ret.data))
+  const [companies, setCompanies] = useState<companyDataProps[]>([]);
 
-    console.log()
+  const { data, isLoading, error } = useQuery("companylist", async () => {
+    await api
+      .get("getallcompanies")
+      .then((response) => setCompanies(response.data.data));
 
-    return {
-        props: {
-            
-        }
-    }
+    return companies;
+  });
+
+  console.log();
+  console.log(companies);
+
+  return (
+    <Box>
+      <Header />
+
+      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+        <Sidebar />
+
+        <Box flex="1" borderRadius={8} bg="gray.800" p="8">
+          <Flex mb="8" justify="space-between" align="center">
+            <Heading size="lg" fontWeight="normal">
+              Company list
+            </Heading>
+
+            <Link href="/companies/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="blue"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+              >
+                Add a new company
+              </Button>
+            </Link>
+          </Flex>
+
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner mt="10" />
+            </Flex>
+          ) : error ? (
+            <Flex justify="center">
+              <Text>The requisition failed</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px={["4", "4", "6"]} color="gray.300" width="">
+                      <Text>Company</Text>
+                    </Th>
+
+                    <Th px={["4", "4", "6"]} width="">
+                      <Text>Responsable</Text>
+                    </Th>
+
+                    <Th>CNPJ</Th>
+
+                    {isWideVersioon && <Th>Register date</Th>}
+                    <Th w="8"></Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {companies.map((company) => (
+                    <Tr key={company.data.companySecretKey}>
+                      <Td px={["4", "4", "6"]}>
+                        <Text>{company.data.company}</Text>
+                      </Td>
+                      <Td>
+                        <Box>
+                          <Text fontWeight="bold">
+                            {company.data.responsable_name}
+                          </Text>
+                          <Text fontSize="sm" color="gray.300">
+                            {company.data.email}
+                          </Text>
+                        </Box>
+                      </Td>
+                      {isWideVersioon && <Td>{company.data.cnpj}</Td>}
+
+                      {isWideVersioon && <Td>{company.data.createdAt}</Td>}
+
+                      <Td>
+                        <Button
+                          as="a"
+                          size="sm"
+                          fontSize="sm"
+                          colorScheme="gray"
+                          color="gray.900"
+                          leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                        >
+                          Edit
+                        </Button>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <Pagination />
+            </>
+          )}
+        </Box>
+      </Flex>
+    </Box>
+  );
 }

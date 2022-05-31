@@ -4,6 +4,7 @@ import { query as q } from 'faunadb'
 
 
 
+
 export default async (request: NextApiRequest, response: NextApiResponse) => {
     
     if(request.method === 'POST'){

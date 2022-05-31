@@ -36,12 +36,18 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         
         try{
 
-            
+            const createdAt = new Date().toLocaleDateString('EN-US', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            })
+
+            console.log(createdAt + 'passou aq')
 
             await fauna.query(
                 q.Create(
                     q.Collection('companies'),
-                    { data: {company, cnpj, responsable_name, email, companySecretKey} }
+                    { data: {company, cnpj, responsable_name, email, companySecretKey, createdAt} }
                 )
             )
 
