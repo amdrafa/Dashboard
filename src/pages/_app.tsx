@@ -7,6 +7,7 @@ import "./calendar.css";
 import { LoginContextProvider } from "../contexts/LoginContext";
 import { SessionProvider as NextAuthProvider } from "next-auth/react";
 import { QueryClientProvider, QueryClient } from "react-query";
+import { ReactQueryDevtools } from 'react-query/devtools'
 
 const queryClient = new QueryClient()
 
@@ -22,6 +23,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           </ChakraProvider>
         </LoginContextProvider>
       </NextAuthProvider>
+
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }

@@ -26,6 +26,7 @@ import { Sidebar } from "../../components/Sidebar";
 import { api } from "../../services/axios";
 import { fauna } from "../../services/fauna";
 import { useQuery } from "react-query";
+import ReactPaginate from 'react-paginate'
 
 interface companyDataProps {
   data: companyProps;
@@ -42,24 +43,37 @@ interface companyProps {
   createdAt: string;
 }
 
+
 export default function CompanyList() {
+    
   const isWideVersioon = useBreakpointValue({
     base: false,
     lg: true,
   });
 
+  const [page, setPage] = useState(1);
+
+  const [limit, setLimit] = useState(5);
+
+  const [total, setTotal] = useState(0);
+
   const [companies, setCompanies] = useState<companyDataProps[]>([]);
 
-  const { data, isLoading, error } = useQuery("companylist", async () => {
-    await api
-      .get("getallcompanies")
-      .then((response) => setCompanies(response.data.data));
+  const { data, isLoading, error } = useQuery<companyDataProps[]>(`companylist${page}`, async () => {
+    const response = await api.get(`getallcompanies?page=${page}&limit=${limit}`)
+    const {PaginateData: ReturnedData} = response.data;
+    console.log(ReturnedData)
+    console.log(data)
 
-    return companies;
+    let totalLenght = 0
+
+    ReturnedData.map(company => totalLenght = totalLenght + 1)
+
+    setTotal(totalLenght)
+    
+    return ReturnedData;
   });
 
-  console.log();
-  console.log(companies);
 
   return (
     <Box>
@@ -68,7 +82,7 @@ export default function CompanyList() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={8} bg="gray.800" p="8">
+        <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={6}>
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Company list
@@ -115,7 +129,7 @@ export default function CompanyList() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {companies.map((company) => (
+                  {data.map((company) => (
                     <Tr key={company.data.companySecretKey}>
                       <Td px={["4", "4", "6"]}>
                         <Text>{company.data.company}</Text>
@@ -150,7 +164,12 @@ export default function CompanyList() {
                   ))}
                 </Tbody>
               </Table>
-              <Pagination />
+              <Pagination 
+              totalCountOfRegisters={total}
+              currentPage={page}
+              onPageChanges={setPage}
+              />
+              
             </>
           )}
         </Box>

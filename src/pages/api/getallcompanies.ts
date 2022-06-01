@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { fauna } from '../../services/fauna'
 import { query as q } from 'faunadb'
+import { useState } from "react";
+
 
 interface companyProps{
     company: string;
@@ -12,13 +14,9 @@ interface companyProps{
 
 
 interface companyDataProps {
-
-    data: {
-        ref: string;
-        ts: string;
-        data: companyProps[]
-    }
-
+    ref: string;
+    ts: string;
+    data: companyProps[]
   }
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -27,9 +25,14 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
 
         console.log("TEST GETTING ALL COMPANIES")
+
+        
         
         try{
-            const companies = await fauna.query<companyDataProps>(
+
+            
+
+            const {data} = await fauna.query<companyDataProps>(
                 q.Map(
                     q.Paginate(
                         q.Match(q.Index('all_companies'))
@@ -38,9 +41,24 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 )
             )
 
-            const {data} = companies
-            response.status(200).json({data})
-            return response.status(200).json({companies})
+            let page = request.url.substr(26, 1)
+            const per_page = 6
+            
+            const slicedData = () => {
+                const pageStart = (Number(page) - 1)*(per_page)
+                const pageEnd = pageStart + per_page
+                const mySlicedData = data.slice(pageStart,pageEnd)
+                console.log(mySlicedData + '1')
+                
+                return mySlicedData
+            }
+           
+            
+            const PaginateData = slicedData()
+            console.log(PaginateData)
+            console.log(data)
+            
+            return response.status(200).json({PaginateData})
         }catch(err){
             console.log('error when getting all companies', err)
             return false
