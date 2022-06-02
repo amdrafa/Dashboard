@@ -4,19 +4,17 @@ import { query as q } from 'faunadb'
 import { useState } from "react";
 
 
-interface companyProps{
-    company: string;
-    cnpj: string;
-    responsable_name: string;
+interface UserProps{
+    name: string;
     email: string;
-    companySecretKey: string;
+    companyRef: string;
 }
 
 
-interface companyDataProps {
+interface UserDataProps {
     ref: string;
     ts: string;
-    data: companyProps[]
+    data: UserProps[]
   }
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
@@ -24,7 +22,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     if(request.method === 'GET'){
 
 
-        console.log("TEST GETTING ALL COMPANIES")
+        console.log("TEST GETTING ALL USERS")
 
         
         
@@ -32,29 +30,30 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
 
             
 
-            const {data} = await fauna.query<companyDataProps>(
+            const {data} = await fauna.query<UserDataProps>(
                 q.Map(
                     q.Paginate(
-                        q.Match(q.Index('all_companies'))
+                        q.Match(q.Index('all_users'))
                     ),
                     q.Lambda(x => q.Get(x))
                 )
             )
 
-            let page = request.url.substr(26, 1)
+            let page = request.url.substr(22, 1)
             const per_page = 6
             
             const slicedData = () => {
                 const pageStart = (Number(page) - 1)*(per_page)
                 const pageEnd = pageStart + per_page
                 const mySlicedData = data.slice(pageStart,pageEnd)
-                console.log(mySlicedData + '1')
+                
                 
                 return mySlicedData
             }
            
             
             const PaginateData = slicedData()
+            
             
             
             return response.status(200).json({PaginateData})

@@ -20,6 +20,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         console.log("heyyyy, tried to register someone", code, name, email, session)
         
         try{
+            const createdAt = new Date().toLocaleDateString('EN-US', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric'
+            })
 
             const companyRef = await fauna.query<DataTransfer>(
                 q.If(
@@ -53,7 +58,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                     ),
                     q.Create(
                         q.Collection('users'),
-                        { data: {name, email, companyRef} }
+                        { data: {name, email, companyRef, createdAt} }
                     ),
                     q.Abort('Company not found')
                 )

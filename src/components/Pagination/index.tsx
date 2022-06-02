@@ -48,7 +48,7 @@ export function Pagination({
       spacing="6"
     >
       <Box>
-        <strong>{currentPage}</strong> - <strong>{totalCountOfRegisters}</strong> de <strong>{Number(lastPage)*6}</strong>
+        <strong></strong>  <strong>{currentPage}</strong> de <strong>{Number(lastPage) == 1 ? currentPage : lastPage}</strong>
       </Box>
       <Stack direction={"row"} spacing="2">
         

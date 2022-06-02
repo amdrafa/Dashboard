@@ -63,7 +63,7 @@ export default function CompanyList() {
     const response = await api.get(`getallcompanies?page=${page}&limit=${limit}`)
     const {PaginateData: ReturnedData} = response.data;
     console.log(ReturnedData)
-    console.log(data)
+    
 
     let totalLenght = 0
 
@@ -82,7 +82,7 @@ export default function CompanyList() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={6}>
+        <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Company list
