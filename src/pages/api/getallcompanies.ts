@@ -48,7 +48,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 const pageStart = (Number(page) - 1)*(per_page)
                 const pageEnd = pageStart + per_page
                 const mySlicedData = data.slice(pageStart,pageEnd)
-                console.log(mySlicedData + '1')
+                
                 
                 return mySlicedData
             }

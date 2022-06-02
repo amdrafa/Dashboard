@@ -35,7 +35,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                         )
                     ),
                     q.Select(
-                        "ref",
+                        "ref", 
                         q.Get(
                             q.Match(
                                 q.Index('company_by_code'),

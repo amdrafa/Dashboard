@@ -39,6 +39,10 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 )
             )
 
+            
+
+            
+
             let page = request.url.substr(22, 1)
             const per_page = 6
             
@@ -47,7 +51,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                 const pageEnd = pageStart + per_page
                 const mySlicedData = data.slice(pageStart,pageEnd)
                 
-                
+                console.log(mySlicedData)
                 return mySlicedData
             }
            
