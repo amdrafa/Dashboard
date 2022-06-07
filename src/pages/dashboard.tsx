@@ -1,11 +1,12 @@
-import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Divider } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import dynamic from "next/dynamic";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { SiOpenaigym } from "react-icons/si";
 import { Pagination } from "../components/Pagination";
+import { BiShapeSquare } from "react-icons/bi";
 
-const Chart = dynamic(() => import('react-apexcharts'), {
+const Chart = dynamic( async () => await import('react-apexcharts'), {
     ssr: false,
 })
 
@@ -78,7 +79,7 @@ export default function Dashboard(){
                 <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
                     <Sidebar />
 
-                    <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start" mt="6">
+                    <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start" mt="6" >
                         <Box
                         p={["6", "8"]}
                         bg="gray.800"
@@ -102,13 +103,27 @@ export default function Dashboard(){
                             </Text>
                             <Chart options={options} series={series} type="area" height={160}/>
                         </Box>
+                        
                     </SimpleGrid>
+
+                    
                 </Flex>
 
                 
-
-
-
+                <Flex w="100%" my="0" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
+                    <Flex w="270px"></Flex>
+                    <Divider />
+                    
+                
+                </Flex>
+                <Flex justify="center">
+                    <Flex w="200px"></Flex>
+                    <Flex justify="center" alignItems="center" mt="60px">
+                        <Icon color="blue.500" shadow="inherit" fontSize="35" mr="2" as={SiOpenaigym} />
+                        <Text color="whiteAlpha.800" shadow="inherit" fontSize="25" fontWeight="bold">Control Room</Text>
+                    </Flex>
+                    
+                </Flex>
 
             
             </Flex>

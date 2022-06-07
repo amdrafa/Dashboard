@@ -8,6 +8,8 @@ import { api } from "../services/axios";
 import { signIn as githubSignIn, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Router from "next/router";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 type SignInFormData = {
   code: string;
@@ -33,27 +35,35 @@ export default function Identification() {
   const handleSignin: SubmitHandler<SignInFormData> = async ({ code }) => {
     console.log(status + "1");
 
-    const response = await api
+    try {
+      const response = await api
       .post("connecttonewcompany", { data: code, session })
       .then((response) => setStatus(response.status));
+    } catch (err) {
+      
+      setStatus(err.response.status);
+      toast.error('Secret code not found')
+    }
 
-    console.log(status + "2");
-
-    
+   
   };
 
   useEffect(() => {
+    console.log(status + "2");
     if (status === 200) {
-        console.log("User connected to company");
-        Router.push("/dashboard");
-      } else {
-        console.log(`User couldn't be connected to company`);
-        const errorMessage = "Secret code not recognized. Please contact your ";
-      }
-  }, [status])
+      console.log("User connected to company");
+      Router.push("/dashboard");
+    } else {
+      console.log(`User couldn't be connected to company`);
+      
+      const errorMessage = "Secret code not recognized. Please contact your ";
+    }
+  }, [status]);
 
   return (
+    
     <Flex w="100vw" h="100vh" alignItems="center" justifyContent="center">
+      <ToastContainer theme="colored"/>
       <Flex
         as="form"
         w="100%"
@@ -85,14 +95,6 @@ export default function Identification() {
             error={errors.code}
             {...register("code")}
           />
-
-          {status && (
-            <Text
-              fontSize="15"
-              color="gray.300"
-              mb="2"
-            >{`• You need a secret key to be part of a company`}</Text>
-          )}
         </Stack>
 
         <Button

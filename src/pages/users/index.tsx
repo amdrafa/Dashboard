@@ -164,15 +164,16 @@ export default function UserList() {
               ))}
             </Tbody>
           </Table>
-              </>
-            
-          )} 
-          
           <Pagination
             totalCountOfRegisters={total}
             currentPage={page}
             onPageChanges={setPage}
           />
+              </>
+            
+          )} 
+          
+          
         </Box>
       </Flex>
     </Box>

@@ -1,5 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { RiDashboardLine, RiContactsLine, RiInputMethodLine, RiGitMergeLine, RiTimeLine } from "react-icons/ri";
+import { BsSpeedometer2 } from "react-icons/bs";
 import {BiBuilding} from "react-icons/bi";
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
@@ -12,6 +13,7 @@ export function SidebarNav(){
                     <NavLink hrefs="/schedule" icon={RiTimeLine}>Schedule</NavLink>
                     <NavLink hrefs="/users" icon={RiContactsLine}>Users</NavLink>
                     <NavLink hrefs="/companies" icon={BiBuilding}>Companies</NavLink>
+                    <NavLink hrefs="/speedways" icon={BsSpeedometer2}>Speedways</NavLink>
                 </NavSection>
 
                 <NavSection title="REPORTS">

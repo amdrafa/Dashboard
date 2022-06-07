@@ -30,6 +30,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             html: message.replace(/\r\n/g, '<br>')
         }
 
+
         console.log("heyyyy, I am at createCompany api" + company, cnpj, responsable_name, email, companySecretKey)
 
         

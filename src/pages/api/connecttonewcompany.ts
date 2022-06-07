@@ -14,6 +14,8 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     
     if(request.method === 'POST'){
 
+        const role = 'USER'
+
         const {data: code, session} = request.body
         const { name, email } = session.user
 
@@ -43,7 +45,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                             )
                         )
                     ),
-                    q.Abort('Company not found')
+                    q.Abort('Company not found1')
                 )
             )
 
@@ -58,9 +60,9 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
                     ),
                     q.Create(
                         q.Collection('users'),
-                        { data: {name, email, companyRef, createdAt} }
+                        { data: {name, email, companyRef, createdAt, role} }
                     ),
-                    q.Abort('Company not found')
+                    q.Abort('Company not found2')
                 )
             )
 
