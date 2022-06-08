@@ -9,7 +9,7 @@ export default function successredirect() {
   const [isLoading, setIsLoading] = useState(true)
  
   useEffect(() => {
-    setTimeout(()=> {Router.push('/')}, 3000)
+    setTimeout(()=> {Router.push('/')}, 4000)
     
   }, [])
 

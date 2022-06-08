@@ -40,7 +40,7 @@ export default function Register() {
     createUser({name, email, password})
     
 
-    Router.push('/successredirect')
+    
   };
 
   return (

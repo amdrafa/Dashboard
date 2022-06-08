@@ -23,7 +23,7 @@ const SignInFormSchema = yup.object().shape({
 export default function Home() {
 
 
-  //const { signIn } = useContext(LoginContext);
+  const { loginAuth } = useContext(LoginContext);
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(SignInFormSchema),
@@ -32,7 +32,7 @@ export default function Home() {
   const { errors } = formState;
 
   const handleSignin: SubmitHandler<SignInFormData> = ({ email, password }) => {
-    //signIn({ email, password });
+    loginAuth({ email, password });
   };
 
   return (
