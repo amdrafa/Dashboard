@@ -40,9 +40,9 @@ import { errors } from "faunadb";
 import { ChooseVehicle } from "../components/ChooseVehicle";
 
 export default function Schedule() {
-  const { user } = useContext(LoginContext);
+  //const { user } = useContext(LoginContext);
 
-  console.log(user + "   schedule page  " + user);
+  //console.log(user + "   schedule page  " + user);
 
   const [speedway, setSpeedway] = useState("");
   const [vehicle, setVehicle] = useState("Light vehicle");
@@ -74,7 +74,7 @@ export default function Schedule() {
     key: "selection",
   };
 
-  console.log(startDate, endDate, speedway, vehicle, user);
+  console.log(startDate, endDate, speedway, vehicle);
 
   async function CreateSchedule() {
     Router.push("/dashboard");
@@ -83,7 +83,7 @@ export default function Schedule() {
       endDate,
       speedway,
       vehicle,
-      user,
+      
     });
   }
 

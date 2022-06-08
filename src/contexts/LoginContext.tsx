@@ -4,19 +4,24 @@ import Router from 'next/router'
 
 
 type User = {
-    email: string;
     name: string;
+    email: string;
+    
+    
 }
 
 interface LogInCreateContextProps {
-    isAuthenticated: boolean;
-    signIn: (user: UserSignIn) => void;
-    user: User;
+    //isAuthenticated: boolean;
+    createUser: (user: createUserProps) => void;
+    //user: User;
 }
 
-type UserSignIn = {
+type createUserProps = {
+    name: string;
     email: string;
     password: string;
+    
+    
 }
 
 
@@ -24,26 +29,21 @@ export const LoginContext = createContext({} as LogInCreateContextProps)
 
 export function LoginContextProvider({children}){
 
-    let [user, setUser] = useState<User>()
+    //let [user, setUser] = useState<User>()
 
-    let isAuthenticated = !!user;
+    //let isAuthenticated = !!user;
 
     
 
 
-    async function signIn({email, password}: UserSignIn){
+    async function createUser({name, email, password}: createUserProps){
 
         try{
+            //setUser({email, name: 'rafael'})
             
-
-            setUser({email, name: 'rafael'})
-        
-            Router.push('/dashboard')
-            console.log(user.email + ' that worked' + user.name)
-            await api.post('createuser', {data: email, password})
-            
-            
-
+            console.log(email + ' that worked' + name)
+            await api.post('createuser', {data: email, password, name})
+            .then(response => console.log(response))
             
         
         }catch(err){
@@ -51,8 +51,12 @@ export function LoginContextProvider({children}){
         }
     }   
 
+
+    //isAutenticated e User (com informações do user) devem ser retornados dentro de mais um objeto
+    // exemplo value={{createUser, user, isAutenticated } }>
     return (
-        <LoginContext.Provider value={{ isAuthenticated, signIn, user  }}>
+        <LoginContext.Provider value={{ createUser }}> 
+        
             {children}
         </LoginContext.Provider>
         
