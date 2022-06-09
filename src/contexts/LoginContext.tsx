@@ -3,20 +3,20 @@ import { api } from "../services/axios";
 import Router from 'next/router'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {parseCookies, destroyCookie} from 'nookies'
 
 
 type User = {
     name: string;
-    email: string;
-    
-    
+    email: string; 
+    roles: string[];
 }
 
 interface LogInCreateContextProps {
     //isAuthenticated: boolean;
     createUser: (user: createUserProps) => void;
     loginAuth: (user:loginProps) => void;
-    //user: User;
+    user: User;
 }
 
 type loginProps = {
@@ -39,15 +39,35 @@ export const LoginContext = createContext({} as LogInCreateContextProps)
 
 export function LoginContextProvider({children}:authProviderProps){
 
-    //let [user, setUser] = useState<User>()
-    const [status, setStatus] = useState(0)
+    const [user, setUser] = useState<User>()
+    const [statusRegister, setStatusRegister] = useState(0)
     const [statusLogin, setStatusLogin] = useState(0)
     //let isAuthenticated = !!user;
 
     useEffect(() => {
-        {status == 200 && Router.push('/successredirect')}
+        
+        const {auth} = parseCookies()
+
+        if (auth){
+            api.get('me').then(response => {
+                const {name, email, roles} = response.data;
+
+                setUser({name, email, roles})
+    
+            })
+            .catch(error => {
+                destroyCookie(undefined, 'auth')
+
+                Router.push('/')
+            })
+        }
+        
+      }, [])
+
+    useEffect(() => {
+        {statusRegister == 200 && Router.push('/successredirect')}
  
-    }, [status])
+    }, [statusRegister])
 
     useEffect(() => {
         {statusLogin == 200 && Router.push('/dashboard')}
@@ -56,9 +76,10 @@ export function LoginContextProvider({children}:authProviderProps){
 
     async function loginAuth({email, password}:loginProps){
         try{
-            await api.post('login', {data: email, password})
-            .then(response => console.log(setStatusLogin(response.status)))
-
+            const response = await api.post('login', {data: email, password})
+            
+            
+            setStatusLogin(response.status) 
             
 
         }catch(err){
@@ -73,10 +94,10 @@ export function LoginContextProvider({children}:authProviderProps){
         try{   
             //setUser({email, name: 'rafael'})
             await api.post('createuser', {data: email, password, name})
-            .then(response => console.log(setStatus(response.status)))
+            .then(response => console.log(setStatusRegister(response.status)))
 
         }catch(err){
-            setStatus(err.response.status)
+            setStatusRegister(err.response.status)
             toast.error('This e-mail is already registered.')
 
         }
@@ -86,7 +107,7 @@ export function LoginContextProvider({children}:authProviderProps){
     //isAutenticated e User (com informações do user) devem ser retornados dentro de mais um objeto
     // exemplo value={{createUser, user, isAutenticated } }>
     return (
-        <LoginContext.Provider value={{ createUser, loginAuth }}> 
+        <LoginContext.Provider value={{ createUser, loginAuth, user }}> 
             <ToastContainer theme="colored" />
             {children}
         </LoginContext.Provider>

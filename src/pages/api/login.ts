@@ -5,19 +5,19 @@ import { compare } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
 import cookie from 'cookie';
 
-interface HashedPasswordProps {
+interface UserDataProps {
   name: string;
   email: string;
   password: string;
   createdAt: string;
   companyRef: string;
-  role: string;
+  roles: string[];
 }
 
-const authenticated =
+export const authenticated =
   (fn: NextApiHandler) => async (req: NextApiRequest, res: NextApiResponse) => {
     verify(
-      req.cookies.auth!,
+      req.headers.authorization!,
       "supersecretkey",
       async function (err, decoded) {
         if (!err && decoded) {
@@ -36,7 +36,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     console.log("Login starting...", email, password);
 
     try {
-      const userData: HashedPasswordProps = await fauna.query(
+      const userData: UserDataProps = await fauna.query(
         q.If(
           q.Not(q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(email)))),
           q.Abort(`E-mail doesn't exist.`),
@@ -49,11 +49,11 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
           const claims = {
             sub: userData.email,
             name: userData.name,
-            role: userData.role,
+            roles: userData.roles,
           };
           const jwt = sign(claims, "supersecretkey", { expiresIn: "1h" });
           response.setHeader('Set-Cookie', cookie.serialize('auth', jwt, {
-              httpOnly: true,
+              httpOnly: false,
               secure: process.env.NODE_ENV !== 'development',
               sameSite: 'strict',
               maxAge: 3600,

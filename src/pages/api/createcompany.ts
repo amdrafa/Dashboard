@@ -3,10 +3,11 @@ import { fauna } from '../../services/fauna'
 import { query as q } from 'faunadb'
 import mail from '@sendgrid/mail'
 import secretKey from 'secret-key'
+import { authenticated } from "./login";
 
 
 
-export default async (request: NextApiRequest, response: NextApiResponse) => {
+export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
 
     
     
@@ -65,5 +66,5 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         response.setHeader('Allow', 'POST')
         response.status(405).end('Method not allowed')
     }
-}
+})
     

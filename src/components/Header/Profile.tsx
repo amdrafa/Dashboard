@@ -1,5 +1,6 @@
-import { Flex, Box, Avatar, Text } from "@chakra-ui/react";
-import {useSession} from 'next-auth/react'
+import { Flex, Box, Avatar, Text, Spinner } from "@chakra-ui/react";
+import { useContext } from "react";
+import {LoginContext} from '../../contexts/LoginContext'
 
 interface ShowProfileProps{
     showProfileData?: boolean;
@@ -7,34 +8,24 @@ interface ShowProfileProps{
 
 export function Profile({showProfileData = true}: ShowProfileProps){
 
-    const {data: session} = useSession()
+    const {user} = useContext(LoginContext)
 
     
 
-    return session? (
+    return user? (
         <Flex
         align="center"
         >
             {showProfileData && (
                 <Box mr="4" textAlign="right">
-                    <Text>{session.user.name}</Text>
-                    <Text color="gray.300" fontSize="small">{session.user.email}</Text>
+                    <Text>{user.name}</Text>
+                    <Text color="gray.300" fontSize="small">{user.email}</Text>
                 </Box>
             )}        
-            <Avatar size="md" name={session.user.name} src={session.user.image} bg="green.600"/>
+            <Avatar size="md" name={user.name} bg="green.600"/>
         </Flex>
     ) : (
-        <Flex
-        align="center"
-        >
-            {showProfileData && (
-                <Box mr="4" textAlign="right">
-                    <Text>nome fake</Text>
-                    <Text color="gray.300" fontSize="small">teste@gmail.com</Text>
-                </Box>
-            )}        
-            <Avatar size="md" name='Bosch Operator' src='' bg="green.600"/>
-        </Flex>
+        <Spinner />
     )
     
    

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { fauna } from '../../services/fauna'
 import { query as q } from 'faunadb'
 import { useState } from "react";
+import { authenticated } from "./login";
 
 
 interface companyProps{
@@ -19,7 +20,7 @@ interface companyDataProps {
     data: companyProps[]
   }
 
-export default async (request: NextApiRequest, response: NextApiResponse) => {
+export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
     
     if(request.method === 'GET'){
 
@@ -68,5 +69,5 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
         response.setHeader('Allow', 'GET')
         response.status(405).end('Method not allowed')
     }
-}
+});
     
