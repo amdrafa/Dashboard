@@ -27,30 +27,39 @@ type loginProps = {
 type createUserProps = {
     name: string;
     email: string;
-    password: string;
-    
+    password: string; 
+}
+
+type authProviderProps = {
+    children: ReactNode;
 }
 
 
 export const LoginContext = createContext({} as LogInCreateContextProps)
 
-export function LoginContextProvider({children}){
+export function LoginContextProvider({children}:authProviderProps){
 
     //let [user, setUser] = useState<User>()
     const [status, setStatus] = useState(0)
+    const [statusLogin, setStatusLogin] = useState(0)
     //let isAuthenticated = !!user;
 
     useEffect(() => {
         {status == 200 && Router.push('/successredirect')}
-
-        
-        
+ 
     }, [status])
+
+    useEffect(() => {
+        {statusLogin == 200 && Router.push('/dashboard')}
+
+    }, [statusLogin])
 
     async function loginAuth({email, password}:loginProps){
         try{
             await api.post('login', {data: email, password})
-            {status == 200 && Router.push('/dashboard')}
+            .then(response => console.log(setStatusLogin(response.status)))
+
+            
 
         }catch(err){
             console.log(err)
