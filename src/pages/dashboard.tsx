@@ -112,7 +112,7 @@ export default function Dashboard(){
                 
                 <Flex w="100%" my="0" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
                     <Flex w="270px"></Flex>
-                    <Divider />
+                    
                     
                 
                 </Flex>

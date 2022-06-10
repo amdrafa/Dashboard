@@ -27,6 +27,16 @@ import { api } from "../../services/axios";
 import { fauna } from "../../services/fauna";
 import { useQuery } from "react-query";
 import ReactPaginate from 'react-paginate'
+import { parseCookies } from "nookies";
+import { decode } from "jsonwebtoken";
+
+export type DecodedToken = {
+  sub: string;
+  iat: number;
+  exp: number;
+  roles: string[];
+  name: string;
+}
 
 interface companyDataProps {
   data: companyProps;
@@ -176,4 +186,20 @@ export default function CompanyList() {
       </Flex>
     </Box>
   );
+}
+
+
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const {auth} = parseCookies(ctx)
+
+  const decodedUser = decode(auth as string) as DecodedToken;
+  
+  
+
+
+  return {
+    props: {}
+  }
 }

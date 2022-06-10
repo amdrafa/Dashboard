@@ -7,11 +7,11 @@ type useCanParams = {
 
 export function useCan({roles}: useCanParams){
 
-    const {user} = useContext(LoginContext)
+    const {user, isAuthenticated} = useContext(LoginContext)
 
-    // if(!isAuthenticated){
-    //     return false
-    // }
+    if(!isAuthenticated){
+        return false
+    }
 
    if(roles?.length > 0){
        const hasAllRoles = roles.some(role => {
