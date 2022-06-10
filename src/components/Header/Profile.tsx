@@ -1,5 +1,6 @@
 import { Flex, Box, Avatar, Text, Spinner } from "@chakra-ui/react";
-import { useContext } from "react";
+import Router from "next/router";
+import { useContext, useEffect } from "react";
 import {LoginContext} from '../../contexts/LoginContext'
 
 interface ShowProfileProps{
@@ -8,9 +9,17 @@ interface ShowProfileProps{
 
 export function Profile({showProfileData = true}: ShowProfileProps){
 
-    const {user} = useContext(LoginContext)
+    const {user, isAuthenticated} = useContext(LoginContext)
 
-    
+    useEffect(() => {
+        const waitAuthenticationLoad = async () => {
+            await new Promise(resolve => setTimeout(resolve, 2000))
+            if(isAuthenticated == false){
+                Router.push('/')
+            }
+        }
+        
+    }, [])
 
     return user? (
         <Flex

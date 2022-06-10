@@ -36,10 +36,10 @@ export default function Register() {
 
   const { errors, isSubmitting } = formState;
 
-  const handleSignin: SubmitHandler<SignInFormData> = ({ email, password, name, password_confirmation }) => {
-    createUser({name, email, password})
-    
+  const handleSignin: SubmitHandler<SignInFormData> = async ({ email, password, name, password_confirmation }) => {
 
+    await new Promise(resolve => setTimeout(resolve, 2000))
+    createUser({name, email, password})
     
   };
 
@@ -94,7 +94,7 @@ export default function Register() {
           mt="8"
           colorScheme="twitter"
           size="lg"
-          isLoading={formState.isSubmitting}
+          isLoading={isSubmitting}
         >
           Register
         </Button>

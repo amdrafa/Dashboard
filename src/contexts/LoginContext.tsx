@@ -13,7 +13,7 @@ type User = {
 }
 
 interface LogInCreateContextProps {
-    //isAuthenticated: boolean;
+    isAuthenticated: boolean;
     createUser: (user: createUserProps) => void;
     loginAuth: (user:loginProps) => void;
     user: User;
@@ -42,7 +42,7 @@ export function LoginContextProvider({children}:authProviderProps){
     const [user, setUser] = useState<User>()
     const [statusRegister, setStatusRegister] = useState(0)
     const [statusLogin, setStatusLogin] = useState(0)
-    //let isAuthenticated = !!user;
+    let isAuthenticated = !!user;
 
     useEffect(() => {
         
@@ -56,13 +56,28 @@ export function LoginContextProvider({children}:authProviderProps){
     
             })
             .catch(error => {
+                isAuthenticated = false
                 destroyCookie(undefined, 'auth')
-
+                api.defaults.headers['authorization'] = ''
                 Router.push('/')
             })
         }
+
+    
+
+        if(!auth){
+            isAuthenticated = false
+            api.defaults.headers['authorization'] = ''
+            Router.push('/')
+        } 
+
+
         
-      }, [])
+        
+        
+      }, [statusLogin])
+
+      
 
     useEffect(() => {
         {statusRegister == 200 && Router.push('/successredirect')}
@@ -78,7 +93,8 @@ export function LoginContextProvider({children}:authProviderProps){
         try{
             const response = await api.post('login', {data: email, password})
             
-            
+            const {auth} = parseCookies()
+            api.defaults.headers['authorization'] = auth
             setStatusLogin(response.status) 
             
 
@@ -107,7 +123,7 @@ export function LoginContextProvider({children}:authProviderProps){
     //isAutenticated e User (com informações do user) devem ser retornados dentro de mais um objeto
     // exemplo value={{createUser, user, isAutenticated } }>
     return (
-        <LoginContext.Provider value={{ createUser, loginAuth, user }}> 
+        <LoginContext.Provider value={{ createUser, loginAuth, user, isAuthenticated }}> 
             <ToastContainer theme="colored" />
             {children}
         </LoginContext.Provider>

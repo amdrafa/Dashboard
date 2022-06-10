@@ -5,6 +5,7 @@ import { useState } from "react";
 import { authenticated } from "./login";
 
 
+
 interface speedwayProps{
     speedway: string;
     vehicles_limit: number;
@@ -64,6 +65,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             return response.status(200).json({PaginateData})
         }catch(err){
             console.log('error when getting all speedways', err)
+            
             return false
         }
         

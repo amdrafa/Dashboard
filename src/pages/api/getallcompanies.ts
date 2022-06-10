@@ -5,6 +5,7 @@ import { useState } from "react";
 import { authenticated } from "./login";
 
 
+
 interface companyProps{
     company: string;
     cnpj: string;

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { authenticated } from "./login";
 
 
+
 interface UserProps{
     name: string;
     email: string;
@@ -64,13 +65,16 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             return response.status(200).json({PaginateData})
         }catch(err){
             console.log('error when getting all companies', err)
+            
             return false
         }
         
 
     }else{
         response.setHeader('Allow', 'GET')
+        
         response.status(405).end('Method not allowed')
+        
     }
 })
     

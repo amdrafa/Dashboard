@@ -31,6 +31,8 @@ interface speedwayDataProps {
 
   export type DecodedToken = {
     sub: string;
+    iat: number;
+    exp: number;
   }
 
   type User = {
@@ -54,6 +56,12 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             const decoded = decode(auth as string) as DecodedToken;
 
             const email = decoded.sub;
+
+            console.log(decoded.exp, new Date().getTime())
+
+            if(decoded.exp > new Date().getTime()){
+              return response.status(401).json({message: "Token expired. Please login again."})
+            }
                 
 
 
@@ -69,7 +77,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             return response.status(200).json({name: userData.name, email: userData.email, roles: userData.roles})
         }catch(err){
             console.log('error when calling "me" route. ', err)
-            return false
+            return response.status(400).json({error: err})
         }
         
 

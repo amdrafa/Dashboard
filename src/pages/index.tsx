@@ -9,6 +9,8 @@ import { LoginContext } from "../contexts/LoginContext";
 import { signIn as githubSignIn, useSession } from "next-auth/react";
 import Router from "next/router";
 import Link from "next/link";
+import { GetServerSideProps } from "next";
+import { parseCookies } from "nookies";
 
 type SignInFormData = {
   email: string;
@@ -29,9 +31,10 @@ export default function Home() {
     resolver: yupResolver(SignInFormSchema),
   });
 
-  const { errors } = formState;
+  const { errors} = formState;
 
-  const handleSignin: SubmitHandler<SignInFormData> = ({ email, password }) => {
+  const handleSignin: SubmitHandler<SignInFormData> = async ({ email, password }) => {
+    await new Promise(resolve => setTimeout(resolve, 2000))
     loginAuth({ email, password });
   };
 
@@ -89,4 +92,22 @@ export default function Home() {
       
     </Flex>
   );
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+
+  const {auth} = parseCookies(ctx)
+
+  if(auth){
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      }
+    }
+  }
+
+  return {
+    props: {}
+  }
 }
