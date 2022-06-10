@@ -192,12 +192,30 @@ export default function CompanyList() {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
-  const {auth} = parseCookies(ctx)
+  // const {auth} = parseCookies(ctx)
 
-  const decodedUser = decode(auth as string) as DecodedToken;
+  // const decodedUser = decode(auth as string) as DecodedToken;
+
+  // const necessaryRoles = ['ADMINISTRATOR']
+  
+  // if(necessaryRoles?.length > 0){
+  //   const hasAllRoles = necessaryRoles.some(role => {
+  //     return decodedUser.roles.includes(role)
+  // });
+
+  // if(!hasAllRoles){
+  //   console.log(hasAllRoles)
+  //   return {
+  //     redirect: {
+  //       destination: '/dashboard',
+  //       permanent: false
+  //     }
+  //   }
+  // }
+  // }
+
   
   
-
 
   return {
     props: {}
