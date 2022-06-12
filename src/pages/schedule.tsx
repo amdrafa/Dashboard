@@ -14,6 +14,7 @@ import {
   HStack,
   Input,
   Link,
+  
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { Header } from "../components/Header";
@@ -148,6 +149,7 @@ export default function Schedule() {
                 bg="gray.900"
                 border="none"
                 height="45px"
+                
               >
                 <option value="BoschSpeedway">BoschSpeedway</option>
                 <option value="PickyBlinders Race Track">
