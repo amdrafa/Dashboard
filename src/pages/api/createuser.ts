@@ -4,7 +4,7 @@ import { query as q } from "faunadb";
 import { hash } from "bcrypt";
 import { authenticated } from "./login";
 
-export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
+export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "POST") {
     const { data: email, password, name } = request.body;
 
@@ -42,4 +42,4 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
     response.setHeader("Allow", "POST");
     response.status(405).end("Method not allowed");
   }
-});
+};

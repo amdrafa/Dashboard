@@ -6,18 +6,19 @@ import { authenticated } from "./login";
 
 
 
-interface speedwayProps{
-    speedway: string;
-    vehicles_limit: number;
-    description: string;
-    createdAt: string;
+interface appointmentProps{
+    company: string;
+    cnpj: string;
+    responsable_name: string;
+    email: string;
+    companySecretKey: string;
 }
 
 
-interface speedwayDataProps {
+interface appointmentsDataProps {
     ref: string;
     ts: string;
-    data: speedwayProps[]
+    data: appointmentProps[]
   }
 
 export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
@@ -25,7 +26,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
     if(request.method === 'GET'){
 
 
-        console.log("TEST GETTING ALL speedways")
+        console.log("TEST GETTING ALL COMPANIES")
 
         
         
@@ -33,27 +34,27 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             
 
-            const {data} = await fauna.query<speedwayDataProps>(
+            const {data} = await fauna.query<appointmentsDataProps>(
                 q.Map(
                     q.Paginate(
-                        q.Match(q.Index('all_speedways'))
+                        q.Match(q.Index('all_schedules'))
                     ),
                     q.Lambda(x => q.Get(x))
                 )
             )
 
             let totalcount = data.length
-            let page = request.url.substr(26, 1)
-            
+
+            console.log(totalcount)
+
+            let page = request.url.substr(33, 1)
+            console.log(page)
             const per_page = 6
-            
             
             const slicedData = () => {
                 const pageStart = (Number(page) - 1)*(per_page)
                 const pageEnd = pageStart + per_page
                 const mySlicedData = data.slice(pageStart,pageEnd)
-
-                
                 
                 
                 return mySlicedData
@@ -65,8 +66,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             
             return response.status(200).json({PaginateData, totalcount})
         }catch(err){
-            console.log('error when getting all speedways', err)
-            
+            console.log('error when getting all user appointments', err)
             return false
         }
         
@@ -75,5 +75,5 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
         response.setHeader('Allow', 'GET')
         response.status(405).end('Method not allowed')
     }
-})
+});
     

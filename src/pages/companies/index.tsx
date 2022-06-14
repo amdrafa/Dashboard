@@ -71,7 +71,7 @@ export default function CompanyList() {
 
   const { data, isLoading, error } = useQuery<companyDataProps[]>(`companylist${page}`, async () => {
     const response = await api.get(`getallcompanies?page=${page}&limit=${limit}`)
-    const {PaginateData: ReturnedData} = response.data;
+    const {PaginateData: ReturnedData, totalcount} = response.data;
     console.log(ReturnedData)
     
 
@@ -79,8 +79,8 @@ export default function CompanyList() {
 
     ReturnedData.map(company => totalLenght = totalLenght + 1)
 
-    setTotal(totalLenght)
-    
+    setTotal(totalcount)
+    console.log(totalLenght)
     return ReturnedData;
   });
 
@@ -175,7 +175,7 @@ export default function CompanyList() {
                 </Tbody>
               </Table>
               <Pagination 
-              totalCountOfRegisters={total}
+              totalCountOfRegisters={total -1}
               currentPage={page}
               onPageChanges={setPage}
               />
@@ -184,7 +184,7 @@ export default function CompanyList() {
           )}
         </Box>
       </Flex>
-    </Box>
+    </Box>   
   );
 }
 

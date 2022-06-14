@@ -14,15 +14,15 @@ import {
   HStack,
   Input,
   Link,
-  
   Link as ChakraLink,
+  Spinner,
 } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
 import {
   RiCalendarLine,
@@ -39,6 +39,19 @@ import { api } from "../services/axios";
 import Router from "next/router";
 import { errors } from "faunadb";
 import { ChooseVehicle } from "../components/ChooseVehicle";
+import { useQuery } from "react-query";
+
+interface speedwayProps{
+  speedway: string;
+  vehicles_limit: number;
+  description: string;
+}
+
+interface dataProps{
+  data: speedwayProps;
+  ref: string;
+  ts: number;
+}
 
 export default function Schedule() {
   //const { user } = useContext(LoginContext);
@@ -55,6 +68,20 @@ export default function Schedule() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
+  const [speedwayList, setSpeedwayList] = useState<speedwayProps>();
+
+  
+  
+  const { data, isLoading, error } = useQuery<dataProps[]>(`SpeedwayList`, async () => {
+    const response = await api.get(`getspeedwaylist`)
+    const {speedways} = response.data;
+    
+    
+    
+    return speedways;
+  });
+  
+  console.log(data)
 
   function handleOpenModal() {
     setIsModalOpen(true);
@@ -151,14 +178,17 @@ export default function Schedule() {
                 height="45px"
                 
               >
-                <option value="BoschSpeedway">BoschSpeedway</option>
-                <option value="PickyBlinders Race Track">
-                  PickyBlinders Race Track
-                </option>
-                <option value="FightClub: The movie">
-                  FightClub: The movie
-                </option>
+                
+                {isLoading? (
+                  <Flex justify="center">
+                  <Spinner mt="10" />
+                </Flex>
+                ): (
+                  data.map((speed) => (<option key={speed.data.speedway} value={speed.data.speedway}>{speed.data.speedway}</option>))
+                )}
               </Select>
+
+              
             </SimpleGrid>
 
             <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
@@ -212,8 +242,8 @@ export default function Schedule() {
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="/dashboard" passHref>
-                <Button as={"a"} colorScheme="whiteAlpha">
+              <Link href="/dashboard">
+                <Button colorScheme="whiteAlpha">
                   Cancel
                 </Button>
               </Link>

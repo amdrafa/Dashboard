@@ -59,7 +59,7 @@ import {
   
     const { data, isLoading, error } = useQuery<speedwayDataProps[]>(`speedwaylist${page}`, async () => {
       const response = await api.get(`getallspeedways?page=${page}&limit=${limit}`)
-      const {PaginateData: ReturnedData} = response.data;
+      const {PaginateData: ReturnedData, totalcount} = response.data;
       console.log(ReturnedData)
       
   
@@ -67,7 +67,8 @@ import {
   
       ReturnedData.map(speedway => totalLenght = totalLenght + 1)
   
-      setTotal(totalLenght)
+      setTotal(totalcount)
+      
       
       return ReturnedData;
     });
@@ -162,7 +163,7 @@ import {
                   </Tbody>
                 </Table>
                 <Pagination 
-                totalCountOfRegisters={total}
+                totalCountOfRegisters={total - 1}
                 currentPage={page}
                 onPageChanges={setPage}
                 />

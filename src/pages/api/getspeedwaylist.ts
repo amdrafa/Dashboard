@@ -25,7 +25,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
     if(request.method === 'GET'){
 
 
-        console.log("TEST GETTING ALL speedways")
+        console.log("TEST SPEEDWAY LIST")
 
         
         
@@ -33,7 +33,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             
 
-            const {data} = await fauna.query<speedwayDataProps>(
+            const {data:speedways} = await fauna.query<speedwayDataProps>(
                 q.Map(
                     q.Paginate(
                         q.Match(q.Index('all_speedways'))
@@ -42,30 +42,11 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 )
             )
 
-            let totalcount = data.length
-            let page = request.url.substr(26, 1)
-            
-            const per_page = 6
             
             
-            const slicedData = () => {
-                const pageStart = (Number(page) - 1)*(per_page)
-                const pageEnd = pageStart + per_page
-                const mySlicedData = data.slice(pageStart,pageEnd)
-
-                
-                
-                
-                return mySlicedData
-            }
-           
-            
-            const PaginateData = slicedData()
-            
-            
-            return response.status(200).json({PaginateData, totalcount})
+            return response.status(200).json({speedways})
         }catch(err){
-            console.log('error when getting all speedways', err)
+            console.log('error when getting speedway list', err)
             
             return false
         }

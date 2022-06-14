@@ -53,17 +53,19 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
       <Popover >
         <MyPopoverTrigger>
           <Link>
-            <Avatar size="md" name={user.name} bg="green.600" />
+            <Avatar color="whiteAlpha.900"  size="md" name={user.name} bg="green.600" />
           </Link>
         </MyPopoverTrigger>
 
         <PopoverContent
+
           zIndex={4}
           color="white"
-          bg="blue.800"
+          bg="blue.900"
           borderColor="blue.800"
           my={2}
           mr="10"
+          
         >
           <PopoverHeader pt={4} fontWeight="bold" border="0">
             Do you want to sign out?

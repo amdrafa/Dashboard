@@ -43,7 +43,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             
 
-            
+            let totalcount = data.length
 
             let page = request.url.substr(22, 1)
             const per_page = 6
@@ -62,7 +62,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             
             
             
-            return response.status(200).json({PaginateData})
+            return response.status(200).json({PaginateData, totalcount})
         }catch(err){
             console.log('error when getting all companies', err)
             

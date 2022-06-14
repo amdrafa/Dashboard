@@ -58,15 +58,15 @@ export default function UserList() {
     `userlist${page}`,
     async () => {
       const response = await api.get(`getallusers?page=${page}&limit=${limit}`);
-      const { PaginateData: ReturnedData } = response.data;
+      const { PaginateData: ReturnedData, totalcount } = response.data;
       console.log(ReturnedData);
       
-
+      setTotal(totalcount)
       let totalLenght = 0;
 
       ReturnedData.map((user) => (totalLenght = totalLenght + 1));
 
-      setTotal(totalLenght);
+      setTotal(totalcount);
 
       return ReturnedData;
     }
@@ -165,7 +165,7 @@ export default function UserList() {
             </Tbody>
           </Table>
           <Pagination
-            totalCountOfRegisters={total}
+            totalCountOfRegisters={total - 1}
             currentPage={page}
             onPageChanges={setPage}
           />

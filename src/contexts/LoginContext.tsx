@@ -125,6 +125,7 @@ export function LoginContextProvider({ children }: authProviderProps) {
     } catch (err) {
       setStatusRegister(err.response.status);
       toast.error("This e-mail is already registered.");
+      console.log(err)
     }
   }
 

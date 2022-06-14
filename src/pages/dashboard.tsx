@@ -1,10 +1,30 @@
-import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Divider } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Divider, Spinner } from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import dynamic from "next/dynamic";
 import { SiOpenaigym } from "react-icons/si";
 import { Pagination } from "../components/Pagination";
 import { BiShapeSquare } from "react-icons/bi";
+import { api } from "../services/axios";
+import { useState } from "react";
+import { useQuery } from "react-query";
+import { RiAddLine, RiPencilLine } from "react-icons/ri";
+
+
+interface appointmentsDataProps {
+    data: appointmentProps;
+    ref: string;
+    ts: number;
+  }
+  
+  interface appointmentProps {
+    speedway: string;
+    startDate: string;
+    endDate: string;
+    vehicle: string;
+  }
+
+
 
 const Chart = dynamic( async () => await import('react-apexcharts'), {
     ssr: false,
@@ -64,12 +84,44 @@ const series = [
     {name: 'series1', data: [31, 120, 10, 28, 61, 18, 109]}
 ];
 
+
+
+
+
+
+
 export default function Dashboard(){
 
     const isWideVersioon = useBreakpointValue({
         base: false,
         lg: true,
     })
+
+
+    const [page, setPage] = useState(1);
+
+  const [limit, setLimit] = useState(5);
+
+  const [total, setTotal] = useState(0);
+
+  const [companies, setCompanies] = useState<appointmentsDataProps[]>([]);
+
+  const { data, isLoading, error } = useQuery<appointmentsDataProps[]>(`appointmentslist${page}`, async () => {
+    const response = await api.get(`getalluserappointments?page=${page}&limit=${limit}`)
+    const {PaginateData: ReturnedData, totalcount} = response.data;
+    console.log(ReturnedData)
+    
+
+    let totalLenght = 0
+
+    ReturnedData.map(company => totalLenght = totalLenght + 1)
+
+    setTotal(totalcount)
+    console.log(totalLenght)
+    return ReturnedData;
+  });
+
+
 
     return (
         <div>
@@ -118,10 +170,87 @@ export default function Dashboard(){
                 </Flex>
                 <Flex justify="center">
                     <Flex w="200px"></Flex>
-                    <Flex justify="center" alignItems="center" mt="60px">
-                        <Icon color="blue.500" shadow="inherit" fontSize="35" mr="2" as={SiOpenaigym} />
-                        <Text color="whiteAlpha.800" shadow="inherit" fontSize="25" fontWeight="bold">Control Room</Text>
-                    </Flex>
+                    <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
+          <Flex mb="8" justify="space-between" align="center">
+            <Heading size="lg" fontWeight="normal">
+              Company list
+            </Heading>
+
+            <Link href="/companies/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="sm"
+                colorScheme="blue"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+              >
+                Add a new company
+              </Button>
+            </Link>
+          </Flex>
+
+          {isLoading ? (
+            <Flex justify="center">
+              <Spinner mt="10" />
+            </Flex>
+          ) : error ? (
+            <Flex justify="center">
+              <Text>The requisition failed</Text>
+            </Flex>
+          ) : (
+            <>
+              <Table colorScheme="whiteAlpha">
+                <Thead>
+                  <Tr>
+                    <Th px={["4", "4", "6"]} color="gray.300" width="">
+                      <Text>Speedway</Text>
+                    </Th>
+
+                    <Th px={["4", "4", "6"]} width="">
+                      <Text>From</Text>
+                    </Th>
+
+                    <Th>To</Th>
+
+                    {isWideVersioon && <Th>Vehicle</Th>}
+                    <Th px={["4", "4", "6"]} width="">
+                      <Text>Status</Text>
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {data.map((appointment) => (
+                    <Tr key={appointment.data.speedway}>
+                      <Td px={["4", "4", "6"]}>
+                        <Text>{appointment.data.speedway}</Text>
+                      </Td>
+                      <Td>
+                          <Text fontWeight="bold">
+                            {appointment.data.startDate}
+                          </Text>
+                      </Td>
+                      {isWideVersioon && <Td>{appointment.data.endDate}</Td>}
+
+                      {isWideVersioon && <Td>{appointment.data.vehicle}</Td>}
+
+                      <Td>
+                          <Text fontWeight="bold" color={"green.400"}>
+                            Confirmed
+                          </Text>
+                      </Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+              <Pagination 
+              totalCountOfRegisters={total - 1}
+              currentPage={page}
+              onPageChanges={setPage}
+              />
+              
+            </>
+          )}
+        </Box>
                     
                 </Flex>
 
