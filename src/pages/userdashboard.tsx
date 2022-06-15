@@ -27,7 +27,7 @@ import { SiOpenaigym } from "react-icons/si";
 import { Pagination } from "../components/Pagination";
 import { BiShapeSquare } from "react-icons/bi";
 import { api } from "../services/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { RiAddLine, RiPencilLine, RiSearchLine } from "react-icons/ri";
 import { GiConfirmed } from "react-icons/gi";
@@ -134,22 +134,25 @@ export default function Dashboard() {
 
   const [companies, setCompanies] = useState<appointmentsDataProps[]>([]);
 
+  const [needsLessHeight, setNeedsLessHeight] = useState('');
+
   const { data, isLoading, error } = useQuery<appointmentsDataProps[]>(
-    `appointmentslist${page}`,
+    `userappointmentslist${page}`,
     async () => {
       const response = await api.get(
-        `getalladmsappointments?page=${page}&limit=${limit}`
+        `getalluserappointments?page=${page}&limit=${limit}`
       );
       const { PaginateData: ReturnedData, totalcount } = response.data;
-      
-
-      
+    
 
       setTotal(totalcount);
       
       return ReturnedData;
     }
   );
+
+
+  
 
   return (
     <>
@@ -195,42 +198,38 @@ export default function Dashboard() {
         <Flex w="100%" my="-16" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
           <Flex w="270px"></Flex>
         </Flex>
-        <Flex justify="center" >
+        <Flex justify="center">
           <Flex w="270px"></Flex>
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8"  mb={20} mr={"38px"} maxWidth={1150}>
+          <Box
+            flex="1"
+            borderRadius={8}
+            bg="gray.800"
+            p="8"
+            mb={20}
+            mr={"38px"}
+            maxWidth={1150}
+            
+          >
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
-                All Appointments
+                My appointments
               </Heading>
 
-              <Flex
-              as="label"
-              flex="1"
-              py="2"
-              px="8"
-              ml="6"
-              maxWidth={230}
-              alignSelf="center"
-              color="gray.200"
-              position="relative"
-              bg="gray.900"
-              borderRadius="full"
-            >
-              <Input
-                color="gray.50"
-                variant="unstyled"
-                px="4"
-                mr="4"
-                placeholder="Search company"
-                _placeholder={{ color: "gray.400" }}
-              />
-              <Icon as={RiSearchLine} fontSize="20" />
-            </Flex>
+              <Link href="/schedule">
+              <Button
+                size="sm"
+                fontSize="sm"
+                colorScheme="blue"
+                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
+              >
+                Schedule an appointment
+              </Button>
+            </Link>
             </Flex>
 
             {isLoading ? (
               <Flex justify="center">
-                <Spinner mt="10" mb="80px"/>
+                <Spinner mt="10" mb="80px" />
               </Flex>
             ) : error ? (
               <Flex justify="center">
@@ -255,29 +254,42 @@ export default function Dashboard() {
                       <Th px={["4", "4", "6"]} width="">
                         <Text>Status</Text>
                       </Th>
-
-                      
                     </Tr>
                   </Thead>
                   <Tbody>
                     {data.map((appointment) => (
                       <Tr key={appointment.ts}>
-                        <Td >
-                          <Text fontWeight="bold">{appointment.data.speedway}</Text>
+                        <Td>
+                          <Text fontWeight="bold">
+                            {appointment.data.speedway}
+                          </Text>
                         </Td>
                         <Td>
                           <Text>
-                            {new Date(appointment.data.startDate).toLocaleDateString()}
+                            {new Date(
+                              appointment.data.startDate
+                            ).toLocaleDateString()}
                           </Text>
                         </Td>
-                        {isWideVersioon && <Td>{new Date(appointment.data.endDate).toLocaleDateString()}</Td>}
+                        {isWideVersioon && (
+                          <Td>
+                            {new Date(
+                              appointment.data.endDate
+                            ).toLocaleDateString()}
+                          </Td>
+                        )}
 
                         {isWideVersioon && <Td>{appointment.data.vehicle}</Td>}
 
-                        <Td> 
-                            <Flex >
-                                <Icon color={"blue.500"} ml={4} as={GiConfirmed} fontSize="20" />
-                            </Flex>
+                        <Td>
+                          <Flex>
+                            <Icon
+                              color={"blue.500"}
+                              ml={4}
+                              as={GiConfirmed}
+                              fontSize="20"
+                            />
+                          </Flex>
                         </Td>
                       </Tr>
                     ))}
@@ -291,7 +303,7 @@ export default function Dashboard() {
               </>) : (<Flex w="100%" justifyContent="center"> 
                 <Box justifyContent="center">
                     <Flex w="100%" justifyContent="center">
-                        <Text fontSize={22} fontWeight="bold">Nobody scheduled an appointment.</Text>         
+                        <Text fontSize={22} fontWeight="bold">You still don't have any appointment.</Text>         
                     </Flex>
                     <Flex w="100%" justifyContent="center">           
                 <Text fontSize={18}>Go to the schedule page and book an appointment.</Text>

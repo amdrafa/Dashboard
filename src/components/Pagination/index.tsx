@@ -24,7 +24,7 @@ export function Pagination({
   currentPage = 1,
   onPageChanges,
 }: PaginationProps) {
-  const lastPage = Math.ceil(totalCountOfRegisters / registersPerPage);
+  const lastPage = Math.floor(totalCountOfRegisters / registersPerPage);
 
   const previousPages =
     currentPage > 1
@@ -55,7 +55,7 @@ export function Pagination({
         {currentPage > (1 + siblingsCount) && (
             <>
                 <PaginationItem onPageChange={onPageChanges} number={1} />
-                {currentPage > (2 + siblingsCount) && <Text color={'gray.300'} w={'8'} textAlign="center" onpagec>...</Text>}
+                {currentPage > (2 + siblingsCount) && <Text color={'gray.300'} w={'8'} textAlign="center">...</Text>}
             </>
             
         )}

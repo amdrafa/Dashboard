@@ -53,25 +53,42 @@ import {
   
     const [limit, setLimit] = useState(5);
   
-    const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(1);
   
     const [speedway, setSpeedway] = useState<speedwayDataProps[]>([]);
+
+    const [needsLessHeight, setNeedsLessHeight] = useState('');
   
     const { data, isLoading, error } = useQuery<speedwayDataProps[]>(`speedwaylist${page}`, async () => {
       const response = await api.get(`getallspeedways?page=${page}&limit=${limit}`)
       const {PaginateData: ReturnedData, totalcount} = response.data;
-      console.log(ReturnedData)
       
-  
-      let totalLenght = 0
-  
-      ReturnedData.map(speedway => totalLenght = totalLenght + 1)
-  
+      
       setTotal(totalcount)
       
       
       return ReturnedData;
     });
+
+    useEffect(() => {
+      let personPerPage = 0
+      
+      console.log(data)
+      {data? (data.forEach((company) => {
+        personPerPage = personPerPage + 1
+        console.log(personPerPage)
+      })) : ('') }
+  
+      switch(personPerPage){
+        case 1: 
+          setNeedsLessHeight('310px')
+          break;
+        case 2: 
+          setNeedsLessHeight('400px')
+          break;
+        default: setNeedsLessHeight('')
+      }
+    }, [setPage, page, data ])
   
   
     return (
@@ -81,7 +98,7 @@ import {
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
   
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
+          <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight} p="8" mt={5}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 Speedway list
@@ -102,14 +119,14 @@ import {
   
             {isLoading ? (
               <Flex justify="center">
-                <Spinner mt="10" />
+                <Spinner mt="110px" />
               </Flex>
             ) : error ? (
               <Flex justify="center">
                 <Text>The requisition failed</Text>
               </Flex>
             ) : (
-              <>
+              total > 0 ? (<>
                 <Table colorScheme="whiteAlpha">
                   <Thead>
                     <Tr>
@@ -163,12 +180,21 @@ import {
                   </Tbody>
                 </Table>
                 <Pagination 
-                totalCountOfRegisters={total - 1}
+                totalCountOfRegisters={total + 3}
                 currentPage={page}
                 onPageChanges={setPage}
                 />
                 
-              </>
+              </>) : (<Flex w="100%" mt={"110px"} justifyContent="center"> 
+                <Box justifyContent="center">
+                    <Flex w="100%" justifyContent="center">
+                        <Text fontSize={22} fontWeight="bold">There is not any speedway registered.</Text>         
+                    </Flex>
+                    <Flex w="100%" justifyContent="center">           
+                <Text fontSize={18}>Register a speedway and wait the users to schedule it.</Text>
+                </Flex> 
+                </Box>
+              </Flex>)
             )}
           </Box>
         </Flex>

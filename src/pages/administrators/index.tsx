@@ -17,7 +17,7 @@ import {
     Spinner,
   } from "@chakra-ui/react";
   import Link from "next/link";
-  import {useState } from "react";
+  import {useState, useEffect } from "react";
   import { RiAddLine, RiPencilLine, RiSearchLine } from "react-icons/ri";
   import { FiTrash } from "react-icons/fi";
   import { Header } from "../../components/Header";
@@ -25,6 +25,7 @@ import {
   import { Sidebar } from "../../components/Sidebar";
   import { api } from "../../services/axios";
   import { useQuery } from "react-query";
+
   
   interface AdmDataProps {
     data: AdmProps;
@@ -50,9 +51,11 @@ import {
   
     const [limit, setLimit] = useState(6);
   
-    const [total, setTotal] = useState(0);
+    const [total, setTotal] = useState(1);
   
     const [users, setUsers] = useState<AdmDataProps[]>([]);
+
+    const [needsLessHeight, setNeedsLessHeight] = useState('');
   
     const { data, isLoading, error } = useQuery<AdmDataProps[]>(
       `admlist${page}`,
@@ -62,9 +65,7 @@ import {
         console.log(ReturnedData);
         
         setTotal(totalcount)
-        let totalLenght = 0;
-  
-        ReturnedData.map((user) => (totalLenght = totalLenght + 1));
+      
   
         setTotal(totalcount);
   
@@ -72,7 +73,25 @@ import {
       }
     );
   
-    console.log(data);
+    useEffect(() => {
+      let personPerPage = 0
+      
+      console.log(data)
+      {data? (data.forEach((company) => {
+        personPerPage = personPerPage + 1
+        console.log(personPerPage)
+      })) : ('') }
+  
+      switch(personPerPage){
+        case 1: 
+          setNeedsLessHeight('320px')
+          break;
+        case 2: 
+          setNeedsLessHeight('400px')
+          break;
+        default: setNeedsLessHeight('')
+      }
+    }, [setPage, page, data ])
   
     return (
       <Box>
@@ -81,7 +100,7 @@ import {
         <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
   
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
+          <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight} p="8" mt={5}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 Administrators list
@@ -102,14 +121,15 @@ import {
   
             {isLoading ? (
             <Flex justify="center">
-              <Spinner mt="10" />
+              <Spinner mt="110px" />
             </Flex>
             ): error ? (
               <Flex justify="center">
                 <Text>The requisition failed</Text>
               </Flex>
             ): (
-                <>
+              
+              total > 0 ? (<>
                 <Table colorScheme="whiteAlpha">
               <Thead>
                 <Tr>
@@ -153,11 +173,20 @@ import {
               </Tbody>
             </Table>
             <Pagination
-              totalCountOfRegisters={total - 1}
+              totalCountOfRegisters={total + 3}
               currentPage={page}
               onPageChanges={setPage}
             />
-                </>
+                </>) : (<Flex w="100%" mt={"110px"} justifyContent="center"> 
+                <Box justifyContent="center">
+                    <Flex w="100%" justifyContent="center">
+                        <Text fontSize={22} fontWeight="bold">There is not any administrator registered.</Text>         
+                    </Flex>
+                    <Flex w="100%" justifyContent="center">           
+                <Text fontSize={18}>Create a new administrator and a passsword will be sent to his e-mail.</Text>
+                </Flex> 
+                </Box>
+              </Flex>)
               
             )} 
             

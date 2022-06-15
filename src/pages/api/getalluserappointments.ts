@@ -3,18 +3,24 @@ import { fauna } from '../../services/fauna'
 import { query as q } from 'faunadb'
 import { useState } from "react";
 import { authenticated } from "./login";
+import { decode } from "jsonwebtoken";
 
-
+export type DecodedToken = {
+    sub: string;
+    iat: number;
+    exp: number;
+    userId: number;
+  }
 
 interface appointmentProps{
     ref: string;
     ts: string;
     data: {
-        company: string;
-        cnpj: string;
-        responsable_name: string;
-        email: string;
-        companySecretKey: string;
+        startDate: string;
+        endDate: string;
+        speedway: string;
+        vehicle: string;
+        userId: string;
     }
     
 }
@@ -31,13 +37,17 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
     if(request.method === 'GET'){
 
 
-        console.log("TEST GETTING ALL COMPANIES")
+        console.log("TEST GETTING ALL USER APPOINTMENTS")
 
         
         
         try{
 
-            
+            const auth = request.headers.authorization;
+                
+            const decoded = decode(auth as string) as DecodedToken;
+
+            const userId = decoded.userId;
 
             const users = await fauna.query<appointmentsDataProps>(
                 q.Map(
@@ -52,16 +62,16 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             const {data} = users
 
-            // data.forEach(schedule => {
-            //     if(schedule.data.roles.includes('ADMINISTRATOR')){
-            //         allUserSchedules.push(schedule)
-            //     }
-            // })
+            data.forEach(schedule => {
+                if(Number(schedule.data.userId) == Number(userId)){
+                    allUserSchedules.push(schedule)
+                }
+            })
 
             console.log(allUserSchedules)
 
 
-            let totalcount = users.data.length
+            let totalcount = allUserSchedules.length
 
             console.log(totalcount)
 
@@ -72,7 +82,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             const slicedData = () => {
                 const pageStart = (Number(page) - 1)*(per_page)
                 const pageEnd = pageStart + per_page
-                const mySlicedData = data.slice(pageStart,pageEnd)
+                const mySlicedData = allUserSchedules.slice(pageStart,pageEnd)
                 
                 
                 return mySlicedData

@@ -5,6 +5,14 @@ import { compare } from "bcrypt";
 import { sign, verify } from "jsonwebtoken";
 import cookie from 'cookie';
 
+interface DataProps {
+  ref: {
+    id: number;
+  };
+  ts: number;
+  data: UserDataProps;
+}
+
 interface UserDataProps {
   name: string;
   email: string;
@@ -36,20 +44,23 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
     console.log("Login starting...", email, password);
 
     try {
-      const userData: UserDataProps = await fauna.query(
+      const userData: DataProps = await fauna.query(
         q.If(
           q.Not(q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(email)))),
           q.Abort(`E-mail doesn't exist.`),
-          q.Select("data", q.Get(q.Match(q.Index("user_by_email"), email)))
+          q.Get(q.Match(q.Index("user_by_email"), email))
         )
       );
 
-      compare(password, userData.password, function (err, result) {
+      console.log(userData.ref.id)
+
+      compare(password, userData.data.password, function (err, result) {
         if (!err && result) {
           const claims = {
-            sub: userData.email,
-            name: userData.name,
-            roles: userData.roles,
+            sub: userData.data.email,
+            name: userData.data.name,
+            roles: userData.data.roles,
+            userId: userData.ref.id
           };
           const jwt = sign(claims, "supersecretkey", { expiresIn: "1h" });
           response.setHeader('Set-Cookie', cookie.serialize('auth', jwt, {

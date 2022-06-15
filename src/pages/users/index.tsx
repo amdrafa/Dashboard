@@ -50,21 +50,20 @@ export default function UserList() {
 
   const [limit, setLimit] = useState(6);
 
-  const [total, setTotal] = useState(0);
+  const [total, setTotal] = useState(1);
 
   const [users, setUsers] = useState<UserDataProps[]>([]);
+
+  const [needsLessHeight, setNeedsLessHeight] = useState('');
 
   const { data, isLoading, error } = useQuery<UserDataProps[]>(
     `userlist${page}`,
     async () => {
       const response = await api.get(`getallusers?page=${page}&limit=${limit}`);
       const { PaginateData: ReturnedData, totalcount } = response.data;
-      console.log(ReturnedData);
+     
       
-      setTotal(totalcount)
-      let totalLenght = 0;
-
-      ReturnedData.map((user) => (totalLenght = totalLenght + 1));
+     
 
       setTotal(totalcount);
 
@@ -72,7 +71,25 @@ export default function UserList() {
     }
   );
 
-  console.log(data);
+  useEffect(() => {
+    let personPerPage = 0
+    
+    console.log(data)
+    {data? (data.forEach((company) => {
+      personPerPage = personPerPage + 1
+      console.log(personPerPage)
+    })) : ('') }
+
+    switch(personPerPage){
+      case 1: 
+        setNeedsLessHeight('320px')
+        break;
+      case 2: 
+        setNeedsLessHeight('400px')
+        break;
+      default: setNeedsLessHeight('')
+    }
+  }, [setPage, page, data ])
 
   return (
     <Box>
@@ -81,7 +98,7 @@ export default function UserList() {
       <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
+        <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight} p="8" mt={5}>
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Users list
@@ -114,62 +131,71 @@ export default function UserList() {
 
           {isLoading ? (
           <Flex justify="center">
-            <Spinner mt="10" />
+            <Spinner mt="110px" />
           </Flex>
           ): error ? (
             <Flex justify="center">
               <Text>The requisition failed</Text>
             </Flex>
           ): (
-              <>
-              <Table colorScheme="whiteAlpha">
-            <Thead>
-              <Tr>
-                <Th px={["4", "4", "6"]} color="gray.300" width="">
-                  <Text>User</Text>
-                </Th>
-                <Th>Company</Th>
-                {isWideVersioon && <Th>Register date</Th>}
-                <Th w="8"></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {data.map((user) => (
-                  <Tr key={user.ts}>
-                  <Td px={["4", "4", "6"]}>
-                    <Box>
-                      <Text fontWeight="bold">{user.data.name}</Text>
-                      <Text fontSize="sm" color="gray.300">
-                      {user.data.email}
-                      </Text>
-                    </Box>
-                  </Td>
-                  <Td>
-                    <Text>{user.ts}</Text>
-                  </Td>
-                  {isWideVersioon && <Td>18 de maio, 2022</Td>}
-                  <Td display="flex" justifyContent="right" mt="2">
-                    <Button
-                      as="a"
-                      size="sm"
-                      fontSize="sm"
-                      colorScheme="gray"
-                      color="gray.900"
-                      leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                    >
-                      Edit
-                    </Button>
-                  </Td>
+              total > 0 ? (<>
+                <Table colorScheme="whiteAlpha">
+              <Thead>
+                <Tr>
+                  <Th px={["4", "4", "6"]} color="gray.300" width="">
+                    <Text>User</Text>
+                  </Th>
+                  <Th>Company</Th>
+                  {isWideVersioon && <Th>Register date</Th>}
+                  <Th w="8"></Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-          <Pagination
-            totalCountOfRegisters={total - 1}
-            currentPage={page}
-            onPageChanges={setPage}
-          />
-              </>
+              </Thead>
+              <Tbody>
+                {data.map((user) => (
+                    <Tr key={user.ts}>
+                    <Td px={["4", "4", "6"]}>
+                      <Box>
+                        <Text fontWeight="bold">{user.data.name}</Text>
+                        <Text fontSize="sm" color="gray.300">
+                        {user.data.email}
+                        </Text>
+                      </Box>
+                    </Td>
+                    <Td>
+                      <Text>{user.ts}</Text>
+                    </Td>
+                    {isWideVersioon && <Td>18 de maio, 2022</Td>}
+                    <Td display="flex" justifyContent="right" mt="2">
+                      <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="gray"
+                        color="gray.900"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                      >
+                        Edit
+                      </Button>
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+            <Pagination
+              totalCountOfRegisters={total + 2}
+              currentPage={page}
+              onPageChanges={setPage}
+            />
+                </>) : (<Flex w="100%" mt={"110px"} justifyContent="center"> 
+                <Box justifyContent="center">
+                    <Flex w="100%" justifyContent="center">
+                        <Text fontSize={22} fontWeight="bold">There is not any user registered.</Text>         
+                    </Flex>
+                    <Flex w="100%" justifyContent="center">           
+                <Text fontSize={18}>Create a company and wait the users to sign up.</Text>
+                </Flex> 
+                </Box>
+              </Flex>)
             
           )} 
           
