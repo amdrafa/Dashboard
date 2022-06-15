@@ -1,4 +1,25 @@
-import { Flex, SimpleGrid, Box, Text, theme, Button, Checkbox, Heading, Icon, Link, Table, Tbody, Td, Th, Thead, Tr, useBreakpointValue, Divider, Spinner } from "@chakra-ui/react";
+import {
+  Flex,
+  SimpleGrid,
+  Box,
+  Text,
+  theme,
+  Button,
+  Checkbox,
+  Heading,
+  Icon,
+  Link,
+  Table,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+  useBreakpointValue,
+  Divider,
+  Spinner,
+  Input,
+} from "@chakra-ui/react";
 import { Header } from "../components/Header";
 import { Sidebar } from "../components/Sidebar";
 import dynamic from "next/dynamic";
@@ -8,97 +29,104 @@ import { BiShapeSquare } from "react-icons/bi";
 import { api } from "../services/axios";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { RiAddLine, RiPencilLine } from "react-icons/ri";
-
+import { RiAddLine, RiPencilLine, RiSearchLine } from "react-icons/ri";
+import { GiConfirmed } from "react-icons/gi";
 
 interface appointmentsDataProps {
-    data: appointmentProps;
-    ref: string;
-    ts: number;
-  }
-  
-  interface appointmentProps {
-    speedway: string;
-    startDate: string;
-    endDate: string;
-    vehicle: string;
-  }
+  data: appointmentProps;
+  ref: string;
+  ts: number;
+}
 
+interface appointmentProps {
+  speedway: string;
+  startDate: string;
+  endDate: string;
+  vehicle: string;
+}
 
-
-const Chart = dynamic( async () => await import('react-apexcharts'), {
-    ssr: false,
-})
+const Chart = dynamic(async () => await import("react-apexcharts"), {
+  ssr: false,
+});
 
 const options = {
-    chart: {
-        toolbar: {
-            show: false
-        },
-        zoom: {
-            enabled: false,
-        },
-        forecolor: theme.colors.gray[500]
+  chart: {
+    toolbar: {
+      show: false,
     },
-    grid: {
-        show: false
+    zoom: {
+      enabled: false,
     },
-    dataLabels: {
-        enabled: false,
+    forecolor: theme.colors.gray[500],
+  },
+  grid: {
+    show: false,
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  tooltip: {
+    enabled: false,
+  },
+  xaxis: {
+    axisBorder: {
+      color: theme.colors.gray[600],
     },
-    tooltip: {
-        enabled: false,
+    axisTicks: {
+      color: theme.colors.gray[600],
     },
-    xaxis: {
-        
-        axisBorder: {
-            color: theme.colors.gray[600]
-        },
-        axisTicks: {
-            color: theme.colors.gray[600]
-        },
-        categories: [
-      
-            new Date("2022-03-23T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-24T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-25T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-26T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-27T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-28T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" }),
-            new Date("2022-03-29T00:00:00.000Z").toLocaleString('pt-BR', { day: "2-digit", month: "short" })
-          ],
-    },
+    categories: [
+      new Date("2022-03-23T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-24T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-25T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-26T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-27T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-28T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+      new Date("2022-03-29T00:00:00.000Z").toLocaleString("pt-BR", {
+        day: "2-digit",
+        month: "short",
+      }),
+    ],
+  },
 
-    fill: {
-        opacity: 0.3,
-        type: 'gradient',
-        gradient: {
-            shade:'dark',
-            opacityFrom: 0.7,
-            opacityTo: 0.3
-        }
-    }
+  fill: {
+    opacity: 0.3,
+    type: "gradient",
+    gradient: {
+      shade: "dark",
+      opacityFrom: 0.7,
+      opacityTo: 0.3,
+    },
+  },
 };
 
-const series = [
-    {name: 'series1', data: [31, 120, 10, 28, 61, 18, 109]}
-];
+const series = [{ name: "series1", data: [31, 120, 10, 28, 61, 18, 109] }];
 
+export default function Dashboard() {
+  const isWideVersioon = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
 
-
-
-
-
-
-export default function Dashboard(){
-
-    const isWideVersioon = useBreakpointValue({
-        base: false,
-        lg: true,
-    })
-
-
-    const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   const [limit, setLimit] = useState(5);
 
@@ -106,160 +134,167 @@ export default function Dashboard(){
 
   const [companies, setCompanies] = useState<appointmentsDataProps[]>([]);
 
-  const { data, isLoading, error } = useQuery<appointmentsDataProps[]>(`appointmentslist${page}`, async () => {
-    const response = await api.get(`getalluserappointments?page=${page}&limit=${limit}`)
-    const {PaginateData: ReturnedData, totalcount} = response.data;
-    console.log(ReturnedData)
-    
+  const { data, isLoading, error } = useQuery<appointmentsDataProps[]>(
+    `appointmentslist${page}`,
+    async () => {
+      const response = await api.get(
+        `getalladmsappointments?page=${page}&limit=${limit}`
+      );
+      const { PaginateData: ReturnedData, totalcount } = response.data;
+      console.log(ReturnedData);
 
-    let totalLenght = 0
+      let totalLenght = 0;
 
-    ReturnedData.map(company => totalLenght = totalLenght + 1)
+      ReturnedData.map((company) => (totalLenght = totalLenght + 1));
 
-    setTotal(totalcount)
-    console.log(totalLenght)
-    return ReturnedData;
-  });
+      setTotal(totalcount);
+      console.log(totalLenght);
+      return ReturnedData;
+    }
+  );
 
+  return (
+    <>
+      <Flex direction="column" h="100vh">
+        <Header />
 
+        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+          <Sidebar />
 
-    return (
-        <div>
-            <Flex direction="column" h="100vh">
-                <Header />
-
-                <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-                    <Sidebar />
-
-                    <SimpleGrid flex="1" gap="4" minChildWidth="320px" alignItems="flex-start" mt="6" >
-                        <Box
-                        p={["6", "8"]}
-                        bg="gray.800"
-                        borderRadius={8}
-                        pb='4'
-                        >
-                            <Text fontSize="lg"  mb="4">
-                                New customers
-                            </Text>
-                            <Chart options={options} series={series} type="area" height={160}/>
-                        </Box>
-
-                        <Box
-                        p={["6", "8"]}
-                        bg="gray.800"
-                        borderRadius={8}
-                        pb='4'
-                        >
-                            <Text fontSize="lg" mb="4">
-                                Speedway usage
-                            </Text>
-                            <Chart options={options} series={series} type="area" height={160}/>
-                        </Box>
-                        
-                    </SimpleGrid>
-
-                    
-                </Flex>
-
-                
-                <Flex w="100%" my="0" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
-                    <Flex w="270px"></Flex>
-                    
-                    
-                
-                </Flex>
-                <Flex justify="center">
-                    <Flex w="200px"></Flex>
-                    <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={5}>
-          <Flex mb="8" justify="space-between" align="center">
-            <Heading size="lg" fontWeight="normal">
-              Company list
-            </Heading>
-
-            <Link href="/companies/create" passHref>
-              <Button
-                as="a"
-                size="sm"
-                fontSize="sm"
-                colorScheme="blue"
-                leftIcon={<Icon as={RiAddLine} fontSize="20" />}
-              >
-                Add a new company
-              </Button>
-            </Link>
-          </Flex>
-
-          {isLoading ? (
-            <Flex justify="center">
-              <Spinner mt="10" />
-            </Flex>
-          ) : error ? (
-            <Flex justify="center">
-              <Text>The requisition failed</Text>
-            </Flex>
-          ) : (
-            <>
-              <Table colorScheme="whiteAlpha">
-                <Thead>
-                  <Tr>
-                    <Th px={["4", "4", "6"]} color="gray.300" width="">
-                      <Text>Speedway</Text>
-                    </Th>
-
-                    <Th px={["4", "4", "6"]} width="">
-                      <Text>From</Text>
-                    </Th>
-
-                    <Th>To</Th>
-
-                    {isWideVersioon && <Th>Vehicle</Th>}
-                    <Th px={["4", "4", "6"]} width="">
-                      <Text>Status</Text>
-                    </Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {data.map((appointment) => (
-                    <Tr key={appointment.data.speedway}>
-                      <Td px={["4", "4", "6"]}>
-                        <Text>{appointment.data.speedway}</Text>
-                      </Td>
-                      <Td>
-                          <Text fontWeight="bold">
-                            {appointment.data.startDate}
-                          </Text>
-                      </Td>
-                      {isWideVersioon && <Td>{appointment.data.endDate}</Td>}
-
-                      {isWideVersioon && <Td>{appointment.data.vehicle}</Td>}
-
-                      <Td>
-                          <Text fontWeight="bold" color={"green.400"}>
-                            Confirmed
-                          </Text>
-                      </Td>
-                    </Tr>
-                  ))}
-                </Tbody>
-              </Table>
-              <Pagination 
-              totalCountOfRegisters={total - 1}
-              currentPage={page}
-              onPageChanges={setPage}
+          <SimpleGrid
+            flex="1"
+            gap="4"
+            minChildWidth="320px"
+            alignItems="flex-start"
+            mt="6"
+          >
+            <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                New customers
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
               />
-              
-            </>
-          )}
-        </Box>
-                    
-                </Flex>
+            </Box>
 
-            
+            <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
+              <Text fontSize="lg" mb="4">
+                Speedway usage
+              </Text>
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
+            </Box>
+          </SimpleGrid>
+        </Flex>
+
+        <Flex w="100%" my="-10" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
+          <Flex w="270px"></Flex>
+        </Flex>
+        <Flex justify="center" >
+          <Flex w="270px"></Flex>
+          <Box flex="1" borderRadius={8} bg="gray.800" p="8"  mb={20} mr={"38px"} maxWidth={1150}>
+            <Flex mb="8" justify="space-between" align="center">
+              <Heading size="lg" fontWeight="normal">
+                All Appointments
+              </Heading>
+
+              <Flex
+              as="label"
+              flex="1"
+              py="2"
+              px="8"
+              ml="6"
+              maxWidth={230}
+              alignSelf="center"
+              color="gray.200"
+              position="relative"
+              bg="gray.900"
+              borderRadius="full"
+            >
+              <Input
+                color="gray.50"
+                variant="unstyled"
+                px="4"
+                mr="4"
+                placeholder="Search for a user"
+                _placeholder={{ color: "gray.400" }}
+              />
+              <Icon as={RiSearchLine} fontSize="20" />
+            </Flex>
             </Flex>
 
+            {isLoading ? (
+              <Flex justify="center">
+                <Spinner mt="10" />
+              </Flex>
+            ) : error ? (
+              <Flex justify="center">
+                <Text>The requisition failed</Text>
+              </Flex>
+            ) : (
+              <>
+                <Table colorScheme="whiteAlpha">
+                  <Thead>
+                    <Tr>
+                      <Th px={["4", "4", "6"]} color="gray.300" width="">
+                        <Text>Speedway</Text>
+                      </Th>
 
-            
-            
-        </div>
-    )   
+                      <Th px={["4", "4", "6"]} width="">
+                        <Text>From</Text>
+                      </Th>
+
+                      <Th>To</Th>
+
+                      {isWideVersioon && <Th>Vehicle</Th>}
+                      <Th px={["4", "4", "6"]} width="">
+                        <Text>Status</Text>
+                      </Th>
+
+                      
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {data.map((appointment) => (
+                      <Tr key={appointment.ts}>
+                        <Td >
+                          <Text fontWeight="bold">{appointment.data.speedway}</Text>
+                        </Td>
+                        <Td>
+                          <Text>
+                            {new Date(appointment.data.startDate).toLocaleDateString()}
+                          </Text>
+                        </Td>
+                        {isWideVersioon && <Td>{new Date(appointment.data.endDate).toLocaleDateString()}</Td>}
+
+                        {isWideVersioon && <Td>{appointment.data.vehicle}</Td>}
+
+                        <Td> 
+                            <Flex >
+                                <Icon color={"blue.500"} ml={4} as={GiConfirmed} fontSize="20" />
+                            </Flex>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+                <Pagination
+                  totalCountOfRegisters={total - 1}
+                  currentPage={page}
+                  onPageChanges={setPage}
+                />
+              </>
+            )}
+          </Box>
+        </Flex>
+      </Flex>
+    </>
+  );
 }

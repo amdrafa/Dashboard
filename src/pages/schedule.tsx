@@ -22,7 +22,7 @@ import { Sidebar } from "../components/Sidebar";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
-import { useContext, useEffect, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 import { Calendar } from "react-date-range";
 import {
   RiCalendarLine,
@@ -70,6 +70,7 @@ export default function Schedule() {
 
   const [speedwayList, setSpeedwayList] = useState<speedwayProps>();
 
+  const { isAuthenticated, user } = useContext(LoginContext)
   
   
   const { data, isLoading, error } = useQuery<dataProps[]>(`SpeedwayList`, async () => {
@@ -104,15 +105,12 @@ export default function Schedule() {
 
   console.log(startDate, endDate, speedway, vehicle);
 
-  async function CreateSchedule() {
-    Router.push("/dashboard");
-    await api.post("scheduletime", {
-      startDate,
-      endDate,
-      speedway,
-      vehicle,
-      
-    });
+  async function CreateSchedule(event:FormEvent) {
+    
+    event.preventDefault()
+    console.log(user.userId)
+    const response = await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
+    console.log(response)
   }
 
   return (
@@ -180,9 +178,7 @@ export default function Schedule() {
               >
                 
                 {isLoading? (
-                  <Flex justify="center">
-                  <Spinner mt="10" />
-                </Flex>
+                  <option value={"loading"}>loading</option>
                 ): (
                   data.map((speed) => (<option key={speed.data.speedway} value={speed.data.speedway}>{speed.data.speedway}</option>))
                 )}
@@ -282,7 +278,7 @@ export default function Schedule() {
               px="5"
               alignItems="center"
             >
-              <ChakraLink href="/dashboard" passHref>
+              <ChakraLink href="/dashboard">
                 <Button onClick={handleCloseModal} bg="red.600">
                   Dashboard
                 </Button>

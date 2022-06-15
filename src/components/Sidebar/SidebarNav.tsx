@@ -12,6 +12,7 @@ export function SidebarNav(){
                     <NavLink hrefs="/dashboard" icon={RiDashboardLine}>Dashboard</NavLink>
                     <NavLink hrefs="/schedule" icon={RiTimeLine}>Schedule</NavLink>
                     <NavLink hrefs="/users" icon={RiContactsLine}>Users</NavLink>
+                    <NavLink hrefs="/administrators" icon={RiContactsLine}>Administrators</NavLink>
                     <NavLink hrefs="/companies" icon={BiBuilding}>Companies</NavLink>
                     <NavLink hrefs="/speedways" icon={BsSpeedometer2}>Speedways</NavLink>
                 </NavSection>

@@ -5,28 +5,21 @@ import { useState } from "react";
 import {decode} from 'jsonwebtoken'
 import { authenticated } from "./login";
 
-
-interface speedwayProps{
-    speedway: string;
-    vehicles_limit: number;
-    description: string;
-    createdAt: string;
-}
-
-
-interface speedwayDataProps {
-    ref: string;
-    ts: string;
-    data: speedwayProps[]
-  }
-
-  interface UserDataProps {
+  interface UserProps {
     name: string;
     email: string;
     password: string;
     createdAt: string;
     companyRef: string;
     roles: string[];
+  }
+
+  interface UserDataProps {
+    ref: {
+      id: number;
+    };
+    ts: string;
+    data: UserProps;
   }
 
   export type DecodedToken = {
@@ -36,6 +29,7 @@ interface speedwayDataProps {
   }
 
   type User = {
+    userId: string;
     name: string;
     email: string; 
     roles: string[];
@@ -69,12 +63,12 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 q.If(
                   q.Not(q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(email)))),
                   q.Abort(`E-mail doesn't exist.`),
-                  q.Select("data", q.Get(q.Match(q.Index("user_by_email"), email)))
+                  q.Get(q.Match(q.Index("user_by_email"), email))
                 )
               );
             
             
-            return response.status(200).json({name: userData.name, email: userData.email, roles: userData.roles})
+            return response.status(200).json({name: userData.data.name, email: userData.data.email, roles: userData.data.roles, userId: userData.ref.id})
         }catch(err){
             console.log('error when calling "me" route. ', err)
             return response.status(400).json({error: err})

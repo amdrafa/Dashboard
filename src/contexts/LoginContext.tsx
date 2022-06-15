@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { parseCookies, destroyCookie } from "nookies";
 
 type User = {
+  userId: string;
   name: string;
   email: string;
   roles: string[];
@@ -74,9 +75,9 @@ export function LoginContextProvider({ children }: authProviderProps) {
       api
         .get("me")
         .then((response) => {
-          const { name, email, roles } = response.data;
+          const { name, email, roles, userId } = response.data;
 
-          setUser({ name, email, roles });
+          setUser({ name, email, roles, userId });
         })
         .catch((error) => {
           isAuthenticated = false;
