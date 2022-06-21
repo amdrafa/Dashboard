@@ -156,15 +156,16 @@ export default function Dashboard() {
       <Flex direction="column" h="100vh">
         <Header />
 
-        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+        <Flex w="100%" mt="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
-
-          <SimpleGrid
+          <Box w={'100%'}>
+            <SimpleGrid
             flex="1"
             gap="4"
             minChildWidth="320px"
             alignItems="flex-start"
             mt="6"
+            
           >
             <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
               <Text fontSize="lg" mb="4">
@@ -190,14 +191,12 @@ export default function Dashboard() {
               />
             </Box>
           </SimpleGrid>
-        </Flex>
+          
+          
 
-        <Flex w="100%" my="-16" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
-          <Flex w="270px"></Flex>
-        </Flex>
-        <Flex justify="center" >
-          <Flex w="270px"></Flex>
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8"  mb={20} mr={"38px"} maxWidth={1150}>
+
+
+          <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={20} mb={20} mr={"38px"} maxWidth={1400}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 All Appointments
@@ -300,7 +299,11 @@ export default function Dashboard() {
               </Flex>)
             )}
           </Box>
+          </Box>
+          
         </Flex>
+
+       
       </Flex>
     </>
   );

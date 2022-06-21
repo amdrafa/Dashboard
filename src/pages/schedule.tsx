@@ -112,7 +112,6 @@ export default function Schedule() {
     const response = await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
     
   }
-
   return (
     <>
       <Header />

@@ -50,21 +50,21 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
         </Box>
       )}
 
-      <Popover >
+      <Popover autoFocus={false}>
         <MyPopoverTrigger>
           <Link>
             <Avatar color="whiteAlpha.900"  size="md" name={user.name} bg="green.600" />
           </Link>
         </MyPopoverTrigger>
 
-        <PopoverContent color='white' bg='blue.800' borderColor='blue.800' mr={10} mt={2}>
+        <PopoverContent color='white' bg='blackAlpha.400' borderColor='blackAlpha.200' mr={10} mt={2}>
         <PopoverHeader pt={4} fontWeight='bold' border='0'>
           Are you leaving?
         </PopoverHeader>
         
         <PopoverCloseButton />
         <PopoverBody>
-          If necessary, you can redefine your informations.
+          We hope you come back soon!
         </PopoverBody>
         <PopoverFooter
           border='0'
@@ -75,8 +75,8 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
         >
           
           
-            <Button fontSize="16" colorScheme='green'>Setup</Button>
-            <Button colorScheme='red' onClick={signOut}>
+            
+            <Button w={'100%'} colorScheme='red' onClick={signOut}>
               Leave
             </Button>
           

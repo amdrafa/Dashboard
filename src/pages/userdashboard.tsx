@@ -198,7 +198,7 @@ export default function Dashboard() {
         <Flex w="100%" my="-16" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
           <Flex w="270px"></Flex>
         </Flex>
-        <Flex justify="center">
+        <Flex justify="center" my="-16" >
           <Flex w="270px"></Flex>
           <Box
             flex="1"

@@ -6,7 +6,7 @@ import { authenticated } from "./login";
 
 export default async (request: NextApiRequest, response: NextApiResponse) => {
   if (request.method === "POST") {
-    const { data: email, password, name } = request.body;
+    const { data: email, password, name, cpf, phone, register_number, driver_category, expires_at } = request.body;
 
     hash(password, 10, async function (err, hash) {
       // Store hash in your password DB.
@@ -26,7 +26,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
               q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(email)))
             ),
             q.Create(q.Collection("users"), {
-              data: { name, email, password: hash, createdAt, companyRef: "", roles: ["USER"] },
+              data: { name, cpf, phone, email, password: hash, createdAt, register_number, driver_category, expires_at,  companyRef: "", roles: ["USER"] },
             }),
             q.Abort("Email already exists")
           )
