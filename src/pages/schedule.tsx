@@ -110,7 +110,7 @@ export default function Schedule() {
     event.preventDefault()
     console.log(user.userId)
     const response = await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
-    console.log(response)
+    
   }
 
   return (

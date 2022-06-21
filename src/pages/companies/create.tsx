@@ -14,13 +14,17 @@ type CreateUserFormData = {
     cnpj: string;
     responsable_name: string;
     email: string;
+    phone: number;
+    hours: number;
   }
   
   const createUserFormSchema = yup.object().shape({
     company: yup.string().required(),  
     cnpj: yup.string().required(),
     responsable_name: yup.string().required().min(4, 'Minimum 6 letters.'),
-    email: yup.string()
+    email: yup.string(),
+    phone: yup.number(),
+    hours: yup.number()
   })
 
 
@@ -32,11 +36,11 @@ export default function CreateCompany(){
 
     const {errors} = formState
 
-    const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email }) => {
+    const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email, phone, hours }) => {
         
         console.log(company, cnpj, responsable_name, email)
         Router.push('/companies')
-        await api.post('createcompany', {data: company, cnpj, responsable_name, email})
+        await api.post('createcompany', {data: company, cnpj, responsable_name, email, phone, hours})
         await new Promise(resolve => setTimeout(resolve, 1000))
         
         
@@ -57,13 +61,18 @@ export default function CreateCompany(){
 
                     <VStack spacing="8">
                         <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
-                            <Input name="company" label="Company" {...register('company')} error={errors.company} />
-                            <Input name="cnpj" label="Cpnj" {...register('cnpj')} error={errors.cnpj}/>
+                            <Input name="company" label="Company" {...register('company')} error={errors.company} autoComplete={'off'}/>
+                            <Input name="cnpj" label="CNPJ" {...register('cnpj')} error={errors.cnpj} autoComplete={'off'}/>
                         </SimpleGrid>
 
                         <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
-                            <Input name="responsable_name" label="Responsable name" {...register('responsable_name')} error={errors.responsable_name}/>
-                            <Input name="email" label="E-mail" {...register('email')} error={errors.email}/>
+                            <Input name="responsable_name" label="Responsable name" {...register('responsable_name')} error={errors.responsable_name} autoComplete={'off'}/>
+                            <Input name="email" label="E-mail" {...register('email')} error={errors.email} autoComplete={'off'}/>
+                        </SimpleGrid>
+
+                        <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
+                            <Input name="phone" label="Phone" {...register('phone')} error={errors.phone} autoComplete={'off'}/>
+                            <Input name="hours" label="Contracted hours" {...register('hours')} error={errors.hours} maxLength={3} autoComplete={'off'}/>
                         </SimpleGrid>
                     </VStack>
 

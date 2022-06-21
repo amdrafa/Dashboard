@@ -57,31 +57,31 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
           </Link>
         </MyPopoverTrigger>
 
-        <PopoverContent
-
-          zIndex={4}
-          color="white"
-          bg="blue.900"
-          borderColor="blue.800"
-          my={2}
-          mr="10"
-          
+        <PopoverContent color='white' bg='blue.800' borderColor='blue.800' mr={10} mt={2}>
+        <PopoverHeader pt={4} fontWeight='bold' border='0'>
+          Are you leaving?
+        </PopoverHeader>
+        
+        <PopoverCloseButton />
+        <PopoverBody>
+          If necessary, you can redefine your informations.
+        </PopoverBody>
+        <PopoverFooter
+          border='0'
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          pb={4}
         >
-          <PopoverHeader pt={4} fontWeight="bold" border="0">
-            Do you want to sign out?
-          </PopoverHeader >
           
-          <PopoverCloseButton />
-          <PopoverBody>
           
-            
-            <Button colorScheme="red" w="100%" onClick={signOut}>
+            <Button fontSize="16" colorScheme='green'>Setup</Button>
+            <Button colorScheme='red' onClick={signOut}>
               Leave
             </Button>
           
-          </PopoverBody>
-          
-        </PopoverContent>
+        </PopoverFooter>
+      </PopoverContent>
       </Popover>
     </Flex>
   ) : (
