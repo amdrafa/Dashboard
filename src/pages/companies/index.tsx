@@ -104,7 +104,7 @@ export default function CompanyList() {
 
 
   return (
-    <Box>
+    <Box mt={-3}>
       <Header />
 
       <Flex w="100%" my="6" maxWidth={1480}  mx="auto" px="6">

@@ -62,6 +62,7 @@ export default async (request: NextApiRequest, response: NextApiResponse) => {
             roles: userData.data.roles,
             userId: userData.ref.id
           };
+
           const jwt = sign(claims, "supersecretkey", { expiresIn: "1h" });
           response.setHeader('Set-Cookie', cookie.serialize('auth', jwt, {
               httpOnly: false,

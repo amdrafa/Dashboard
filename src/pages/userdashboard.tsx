@@ -156,12 +156,15 @@ export default function Dashboard() {
 
   return (
     <>
-      <Flex direction="column" h="100vh">
+      <Box mt={-3}>
         <Header />
 
-        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+        <Flex w="100%" mt="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
 
+        <Box w={"100%"} px={6} ml={6}>
+
+        
           <SimpleGrid
             flex="1"
             gap="4"
@@ -193,21 +196,20 @@ export default function Dashboard() {
               />
             </Box>
           </SimpleGrid>
-        </Flex>
 
-        <Flex w="100%" my="-16" maxWidth={1480} mx="auto" px="6" opacity={0.3}>
-          <Flex w="270px"></Flex>
-        </Flex>
-        <Flex justify="center" my="-16" >
-          <Flex w="270px"></Flex>
+
+
+
           <Box
             flex="1"
             borderRadius={8}
             bg="gray.800"
             p="8"
+            ml={8} 
+            mt={20}
             mb={20}
             mr={"38px"}
-            maxWidth={1150}
+            maxWidth={1400}
             
           >
             <Flex mb="8" justify="space-between" align="center">
@@ -312,8 +314,13 @@ export default function Dashboard() {
               </Flex>)
             )}
           </Box>
+
+          </Box>
         </Flex>
-      </Flex>
+
+        
+        
+      </Box>
     </>
   );
 }

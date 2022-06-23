@@ -10,7 +10,8 @@ export type DecodedToken = {
     iat: number;
     exp: number;
     userId: number;
-  }
+    
+}
 
 interface appointmentProps{
     ref: string;
@@ -49,6 +50,8 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             const userId = decoded.userId;
 
+            
+
             const users = await fauna.query<appointmentsDataProps>(
                 q.Map(
                     q.Paginate(
@@ -62,13 +65,15 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             const {data} = users
 
+            
+
             data.forEach(schedule => {
-                if(Number(schedule.data.userId) == Number(userId)){
+                if(Number(schedule.data.userId) == userId){
                     allUserSchedules.push(schedule)
                 }
             })
 
-            console.log(allUserSchedules)
+            
 
 
             let totalcount = allUserSchedules.length
@@ -95,7 +100,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             return response.status(200).json({PaginateData, totalcount})
         }catch(err){
             console.log('error when getting all user appointments', err)
-            return false
+            return response.status(400).json({message: "Get all user appointments failured"})
         }
         
 

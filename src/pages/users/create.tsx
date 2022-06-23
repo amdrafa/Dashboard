@@ -39,7 +39,7 @@ export default function CreateUser(){
     }
 
     return (
-        <Box>
+        <Flex direction="column" h="100vh">
             <Header />
 
             <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -76,6 +76,6 @@ export default function CreateUser(){
 
                 </Box>
             </Flex>
-        </Box>
+        </Flex>
     );
 }

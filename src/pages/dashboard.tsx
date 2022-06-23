@@ -153,12 +153,12 @@ export default function Dashboard() {
 
   return (
     <>
-      <Flex direction="column" h="100vh">
+      <Box mt={-3}>
         <Header />
 
         <Flex w="100%" mt="6" maxWidth={1480} mx="auto" px="6">
           <Sidebar />
-          <Box w={'100%'}>
+          <Box w={'100%'} px={6} ml={6}>
             <SimpleGrid
             flex="1"
             gap="4"
@@ -196,7 +196,7 @@ export default function Dashboard() {
 
 
 
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8" mt={20} mb={20} mr={"38px"} maxWidth={1400}>
+          <Box flex="1" borderRadius={8} bg="gray.800" p="8" ml={8} mt={20} mb={20} mr={"38px"} maxWidth={1400}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 All Appointments
@@ -283,7 +283,7 @@ export default function Dashboard() {
                   </Tbody>
                 </Table>
                 <Pagination
-                  totalCountOfRegisters={total + 2}
+                  totalCountOfRegisters={total + 1}
                   currentPage={page}
                   onPageChanges={setPage}
                 />
@@ -304,7 +304,7 @@ export default function Dashboard() {
         </Flex>
 
        
-      </Flex>
+      </Box>
     </>
   );
 }

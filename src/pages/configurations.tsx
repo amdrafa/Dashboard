@@ -8,6 +8,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup' 
 import { api } from "../services/axios";
 import Router from "next/router";
+import { useContext } from "react";
+import { LoginContext } from "../contexts/LoginContext";
 
 type CreateSpeedwayFormData = {
     old_password: string;
@@ -18,13 +20,15 @@ type CreateSpeedwayFormData = {
   
   const createUserFormSchema = yup.object().shape({
     old_password: yup.string().required(),  
-    old_password_confirmation: yup.number().required().oneOf([null, yup.ref("old_password")], "The passwords need to be the same"),
+    old_password_confirmation: yup.string().required().oneOf([null, yup.ref("old_password")], "The passwords need to be the same"),
     new_password: yup.string().required().min(6, 'Minimum 6 letters.'),
     new_password_confirmation: yup.string().required().min(6, 'Minimum 6 letters.').oneOf([null, yup.ref("new_password")], "The new passwords need to be the same")
   })
 
 
 export default function Configurations(){
+
+    const { user } = useContext(LoginContext)
 
     const { register, handleSubmit, formState } = useForm({
         resolver: yupResolver(createUserFormSchema)
@@ -35,21 +39,21 @@ export default function Configurations(){
     const handleCreateUser: SubmitHandler<CreateSpeedwayFormData> = async ({old_password, old_password_confirmation, new_password, new_password_confirmation }) => {
         
         console.log(old_password, new_password)
-        Router.push('/speedways')
-        // await api.post('createspeedway', {data: speedway, vehicles_limit, description})
+        // Router.push('/speedways')
+        const response = await api.post('updatedata', {data: new_password, email: user.email, old_password}).then(response => console.log(response))
         await new Promise(resolve => setTimeout(resolve, 1000))
         
         
     }
 
     return (
-        <Box>
+        <Box mt={-3} ml={-4}>
             <Header />
 
             <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
                 <Sidebar />
 
-                <Box as='form' flex='1' height={"100%"} borderRadius={8} bg='gray.800' p='8' onSubmit={handleSubmit(handleCreateUser)}>
+                <Box as='form' flex='1' height={"100%"} borderRadius={8} bg='gray.800' p='8' mt={5} onSubmit={handleSubmit(handleCreateUser)}>
 
                     <Heading size="lg" fontWeight="normal">Configurations</Heading>
 
@@ -71,7 +75,7 @@ export default function Configurations(){
 
                     <Flex mt="8" justify="flex-end">
                         <HStack spacing="4">
-                            <Link href="/speedways" passHref>
+                            <Link href="/userdashboard" passHref>
                                 <Button as={"a"} colorScheme="whiteAlpha">Cancel</Button>
                             </Link>
                             <Button isLoading={formState.isSubmitting} type="submit" colorScheme="blue">Save</Button>

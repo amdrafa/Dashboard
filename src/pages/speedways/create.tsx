@@ -41,13 +41,13 @@ export default function CreateSpeedway(){
     }
 
     return (
-        <Box>
+        <Box mt={-3} ml={-4}>
             <Header />
 
             <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
                 <Sidebar />
 
-                <Box as='form' flex='1' height={"100%"} borderRadius={8} bg='gray.800' p='8' onSubmit={handleSubmit(handleCreateUser)}>
+                <Box as='form' flex='1' height={"100%"} borderRadius={8} bg='gray.800' p='8' mt={5} onSubmit={handleSubmit(handleCreateUser)}>
 
                     <Heading size="lg" fontWeight="normal">Add a Speedway</Heading>
 

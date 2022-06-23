@@ -57,15 +57,13 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
           </Link>
         </MyPopoverTrigger>
 
-        <PopoverContent color='white' bg='blackAlpha.400' borderColor='blackAlpha.200' mr={10} mt={2}>
+        <PopoverContent color='white' bg='blackAlpha.500' borderColor='blackAlpha.200' mr={10} mt={2}>
         <PopoverHeader pt={4} fontWeight='bold' border='0'>
           Are you leaving?
         </PopoverHeader>
         
         <PopoverCloseButton />
-        <PopoverBody>
-          We hope you come back soon!
-        </PopoverBody>
+        
         <PopoverFooter
           border='0'
           display='flex'

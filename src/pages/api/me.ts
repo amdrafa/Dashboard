@@ -51,7 +51,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             const email = decoded.sub;
 
-            console.log(decoded.exp, new Date().getTime())
+            console.log()
 
             if(decoded.exp > new Date().getTime()){
               return response.status(401).json({message: "Token expired. Please login again."})
