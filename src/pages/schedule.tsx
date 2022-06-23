@@ -54,9 +54,7 @@ interface dataProps{
 }
 
 export default function Schedule() {
-  //const { user } = useContext(LoginContext);
-
-  //console.log(user + "   schedule page  " + user);
+ 
 
   const [speedway, setSpeedway] = useState("");
   const [vehicle, setVehicle] = useState("Light vehicle");

@@ -12,6 +12,7 @@ import { authenticated } from "./login";
     createdAt: string;
     companyRef: string;
     roles: string[];
+    expires_at?: string;
   }
 
   interface UserDataProps {
@@ -67,8 +68,11 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 )
               );
             
+            if(!userData.data.expires_at){
+              userData.data.expires_at = null
+            }
             
-            return response.status(200).json({name: userData.data.name, email: userData.data.email, roles: userData.data.roles, userId: userData.ref.id})
+            return response.status(200).json({name: userData.data.name, email: userData.data.email, roles: userData.data.roles, userId: userData.ref.id, driver_expiration: userData.data.expires_at, companyRef: userData.data.companyRef })
         }catch(err){
             console.log('error when calling "me" route. ', err)
             return response.status(400).json({error: err})

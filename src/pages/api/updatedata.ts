@@ -64,8 +64,6 @@ export default authenticated(
       console.log(new_password, old_password, email);
 
       try{
-
-      
       
         const userData: DataProps = await fauna.query(
           q.If(

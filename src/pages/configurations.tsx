@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import { Input } from "../components/Form/input";
 import { Header } from "../components/Header";
@@ -8,8 +8,9 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup' 
 import { api } from "../services/axios";
 import Router from "next/router";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../contexts/LoginContext";
+import { toast } from "react-toastify";
 
 type CreateSpeedwayFormData = {
     old_password: string;
@@ -28,6 +29,12 @@ type CreateSpeedwayFormData = {
 
 export default function Configurations(){
 
+    const [status, setStatus] = useState(0)
+
+    useEffect(() => {
+        status == 200 && Router.push('/userdashboard')
+    }, [status])
+
     const { user } = useContext(LoginContext)
 
     const { register, handleSubmit, formState } = useForm({
@@ -40,8 +47,12 @@ export default function Configurations(){
         
         console.log(old_password, new_password)
         // Router.push('/speedways')
-        const response = await api.post('updatedata', {data: new_password, email: user.email, old_password}).then(response => console.log(response))
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        try{
+            const response = await api.post('updatedata', {data: new_password, email: user.email, old_password}).then(response => setStatus(response.status))
+        
+        }catch(err){
+            toast.error("Current password not correct");
+        }
         
         
     }
@@ -66,7 +77,11 @@ export default function Configurations(){
                         </SimpleGrid>
 
                         <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
-                            <Input type={"password"} name="new_password" label="New password" {...register('new_password')} error={errors.new_password}/>
+                            <Box>
+                                <Input type={"password"} name="new_password" label="New password" {...register('new_password')} error={errors.new_password}/>
+                                <Text ml={2} mt={2} color="gray.500">Minimum 6 characteres</Text>
+                            </Box>
+                            
 
                             <Input type={"password"} name="new_password_confirmation" label="New password confirmation" {...register('new_password_confirmation')} error={errors.new_password_confirmation}/>
                             

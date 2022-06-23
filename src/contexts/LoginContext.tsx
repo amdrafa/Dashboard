@@ -10,6 +10,8 @@ type User = {
   name: string;
   email: string;
   roles: string[];
+  companyRef: string;
+  driver_expiration?: string;
 };
 
 interface LogInCreateContextProps {
@@ -80,9 +82,9 @@ export function LoginContextProvider({ children }: authProviderProps) {
       api
         .get("me")
         .then((response) => {
-          const { name, email, roles, userId } = response.data;
-
-          setUser({ name, email, roles, userId });
+          const { name, email, roles, userId, driver_expiration, companyRef } = response.data;
+          console.log(driver_expiration)
+          setUser({ name, email, roles, companyRef, userId, driver_expiration });
         })
         .catch((error) => {
           isAuthenticated = false;
