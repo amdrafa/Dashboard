@@ -50,14 +50,15 @@ export function Profile({ showProfileData = true }: ShowProfileProps) {
         </Box>
       )}
 
-      <Popover autoFocus={false}>
+      <Popover
+      >
         <MyPopoverTrigger>
           <Link>
             <Avatar color="whiteAlpha.900"  size="md" name={user.name} bg="green.600" />
           </Link>
         </MyPopoverTrigger>
 
-        <PopoverContent color='white' bg='blackAlpha.900' borderColor='blackAlpha.200' mr={10} mt={2}>
+        <PopoverContent shadow={'dark-lg'} color='white' bg="#292A36" borderColor='blackAlpha.200' mr={10} mt={2}>
         <PopoverHeader pt={4} fontWeight='bold' border='0'>
           Are you leaving?
         </PopoverHeader>
