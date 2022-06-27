@@ -66,7 +66,7 @@ export function NotificationsNav() {
               <Box>
               
                 {user?.companyRef == '' && (
-                  <Link style={{ textDecoration: 'none' }} href="/configurations" passHref >
+                  <Link style={{ textDecoration: 'none' }} href="/configurations" >
                   <Flex  alignItems={"center"} borderBottom={'2px'} borderBottomColor={'#333442'} pr={2} py={2}  cursor={'pointer'} _hover={{bg: "#21222c"}}>
                     
 
@@ -87,8 +87,8 @@ export function NotificationsNav() {
                 {user?.driver_expiration?  (
                   ''
                 ) : (
-                  <Link style={{ textDecoration: 'none' }} href="/configurations" passHref >
-                  <Flex alignItems={"center"} borderBottom={'2px'} borderBottomColor={'#333442'} pr={2} py={2} as={'a'} cursor={'pointer'} _hover={{bg: "#21222c"}}>
+                  <Link style={{ textDecoration: 'none' }} href="/configurations"  >
+                  <Flex alignItems={"center"} borderBottom={'2px'} borderBottomColor={'#333442'} pr={2} py={2} cursor={'pointer'} _hover={{bg: "#21222c"}}>
 
                   <Flex p={4}>
                     <Icon fontSize={30} as={BsExclamationCircle} color={"blue.500"}/>
@@ -107,8 +107,8 @@ export function NotificationsNav() {
 
                 {user?.driver_expiration && (
                   new Date(user?.driver_expiration) <= new Date() ? (
-                    <Link style={{ textDecoration: 'none' }} href="/configurations" passHref > 
-                  <Flex alignItems={"center"} pr={2} py={3} as={'a'}  borderBottom={'2px'} borderBottomColor={'#333442'}  cursor={'pointer'} _hover={{bg: "#21222c"}}>
+                    <Link style={{ textDecoration: 'none' }} href="/configurations" > 
+                  <Flex alignItems={"center"} pr={2} py={3}  borderBottom={'2px'} borderBottomColor={'#333442'}  cursor={'pointer'} _hover={{bg: "#21222c"}}>
 
                   <Flex p={4}>
                     <Icon fontSize={30} as={BsExclamationCircle} color={"blue.500"}/>

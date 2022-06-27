@@ -59,23 +59,23 @@ export default authenticated(
     if (request.method === "POST") {
       console.log("Updating user informations");
 
-      const { data: new_password, old_password, email } = request.body;
+      const { data: new_password, old_password, new_email, current_email, name: new_name, phone: new_phone, cpf: new_cpf } = request.body;
 
-      console.log(new_password, old_password, email);
+      console.log(new_password, old_password, new_email);
 
       try{
-      
+        
         const userData: DataProps = await fauna.query(
           q.If(
             q.Not(
-              q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(email)))
+              q.Exists(q.Match(q.Index("user_by_email"), q.Casefold(current_email)))
             ),
             q.Abort(`E-mail doesn't exist.`),
-            q.Get(q.Match(q.Index("user_by_email"), email))
+            q.Get(q.Match(q.Index("user_by_email"), current_email))
           )
         );
-        
 
+        
         compare(old_password, userData.data.password, function (err, result) {
         
 
@@ -99,12 +99,12 @@ export default authenticated(
                 q.If(
                   q.Not(
                     q.Exists(
-                      q.Match(q.Index("user_by_email"), q.Casefold(email))
+                      q.Match(q.Index("user_by_email"), q.Casefold(current_email))
                     )
                   ),
                   q.Abort(`E-mail is not registered.`),
                   q.Update(q.Ref(q.Collection("users"), userId), {
-                    data: { password: hash },
+                    data: {email: new_email, password: hash, name: new_name, cpf: new_cpf, phone: new_phone },
                   })
                 )
               );

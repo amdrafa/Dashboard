@@ -6,15 +6,9 @@ import {decode} from 'jsonwebtoken'
 import { authenticated } from "./login";
 
   interface UserProps {
-    name: string;
-    email: string;
-    password: string;
-    createdAt: string;
-    companyRef: string;
-    roles: string[];
-    expires_at?: string;
-    cpf: string;
-    phone: string;
+    register_number: string;
+    driver_category: string;
+    expires_at: string;
   }
 
   interface UserDataProps {
@@ -31,19 +25,12 @@ import { authenticated } from "./login";
     exp: number;
   }
 
-  type User = {
-    userId: string;
-    name: string;
-    email: string; 
-    roles: string[];
-}
-
 export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
     
     if(request.method === 'GET'){
 
 
-        console.log("Me route. Responsable for bringing all the user informations.")
+        console.log("My driver licence route. Responsable for bringing all driver licence informations.")
 
         
         try{
@@ -54,7 +41,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             const email = decoded.sub;
 
-            console.log()
+
 
             if(decoded.exp > new Date().getTime()){
               return response.status(401).json({message: "Token expired. Please login again."})
@@ -73,8 +60,8 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             if(!userData.data.expires_at){
               userData.data.expires_at = null
             }
-            
-            return response.status(200).json({name: userData.data.name, email: userData.data.email, roles: userData.data.roles, userId: userData.ref.id, driver_expiration: userData.data.expires_at, companyRef: userData.data.companyRef, cpf: userData.data.cpf, phone: userData.data.phone })
+            console.log('data returned')
+            return response.status(200).json({register_number: userData.data.register_number, driver_category: userData.data.driver_category, expires_at: userData.data.expires_at })
         }catch(err){
             console.log('error when calling "me" route. ', err)
             return response.status(400).json({error: err})

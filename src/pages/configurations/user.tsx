@@ -24,6 +24,10 @@ import { LoginContext } from "../../contexts/LoginContext";
 import { toast } from "react-toastify";
 
 type CreateSpeedwayFormData = {
+  name: string;
+  phone: number;
+  email: string;
+  cpf: number;
   old_password: string;
   old_password_confirmation: string;
   new_password: string;
@@ -31,6 +35,10 @@ type CreateSpeedwayFormData = {
 };
 
 const createUserFormSchema = yup.object().shape({
+  name: yup.string().required(),
+  phone: yup.number().required(),
+  email: yup.string().required(),
+  cpf: yup.number().required(),
   old_password: yup.string().required(),
   old_password_confirmation: yup
     .string()
@@ -67,9 +75,11 @@ export default function User() {
 
   const handleCreateUser: SubmitHandler<CreateSpeedwayFormData> = async ({
     old_password,
-    old_password_confirmation,
     new_password,
-    new_password_confirmation,
+    name,
+    phone,
+    email,
+    cpf
   }) => {
     console.log(old_password, new_password);
     // Router.push('/speedways')
@@ -77,8 +87,12 @@ export default function User() {
       const response = await api
         .post("updatedata", {
           data: new_password,
-          email: user.email,
           old_password,
+          name,
+          phone, 
+          new_email: email,
+          current_email: user.email,
+          cpf
         })
         .then((response) => setStatus(response.status));
     } catch (err) {
@@ -122,11 +136,12 @@ export default function User() {
                   />
 
                   <Input
-                    defaultValue={user?.name}
+                    defaultValue={user?.phone}
+                    type="number"
                     name="phone"
                     label="Phone"
                     {...register("phone")}
-                    error={errors.name}
+                    error={errors.phone}
                   />
                 </SimpleGrid>
 
@@ -194,8 +209,8 @@ export default function User() {
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                  <Link href="/userdashboard" passHref>
-                    <Button as={"a"} colorScheme="whiteAlpha">
+                  <Link href="/configurations">
+                    <Button  colorScheme="whiteAlpha">
                       Cancel
                     </Button>
                   </Link>

@@ -26,9 +26,7 @@ import { RiCarLine, RiContactsLine } from "react-icons/ri";
 import { MdOutlineBadge } from "react-icons/md";
 import { BiBuilding } from "react-icons/bi";
 
-
 export default function Configurations() {
-
   return (
     <Box mt={-3} ml={-4}>
       <Header />
@@ -37,13 +35,12 @@ export default function Configurations() {
         <Sidebar />
 
         <Box
-          as="form"
           flex="1"
           height={"100%"}
           borderRadius={8}
           bg="gray.800"
           p="8"
-          pb={'16'}
+          pb={"16"}
           mt={5}
         >
           <Heading size="lg" fontWeight="normal">
@@ -56,29 +53,23 @@ export default function Configurations() {
             <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
               <ChooseConfig
                 icon={RiContactsLine}
-                vehicleType="Personal Informations"
-                onClick={() => {}}
+                vehicleType="Personal informations"
+                onClick={() => {
+                  Router.push("/configurations/user");
+                }}
                 isActive={false}
               />
 
               <ChooseConfig
                 icon={MdOutlineBadge}
-                vehicleType="Driver Licence"
-                onClick={() => {}}
+                vehicleType="Driver licence"
+                onClick={() => {
+                  Router.push("/configurations/driverlicence");
+                }}
                 isActive={false}
               />
-
-              <ChooseConfig
-                icon={BiBuilding}
-                vehicleType="Company details"
-                onClick={() => {}}
-                isActive={false}
-              />
-
             </SimpleGrid>
           </VStack>
-
-          
         </Box>
       </Flex>
     </Box>
