@@ -30,9 +30,6 @@ type UpdateUserCompany= {
 
 
 type CompanyDataProps = {
-  ref: {
-    id: string;
-  }
   data: {
     company:string;
     cnpj: string;
@@ -50,19 +47,33 @@ const createUserFormSchema = yup.object().shape({
 
 export default function Company() {
 
-  const { data, isLoading, error } = useQuery<CompanyDataProps>(`companyConfig`, async () => {
-    const response = await api.post("getcompanydata", {companyRef: 'YWWXPSH-XN1EGH3-39XK58X'})
-    // const {  } = response.data;
-    console.log(response)
+  const { user } = useContext(LoginContext);
+
+
+  try{
     
-    return response.data;
-  });
+    const { data, isLoading, error } = useQuery<CompanyDataProps>(`companyConfig`, async () => {
+      await new Promise(resolve => setTimeout(resolve, 2000))
+      
+      
+        const response = await api.get("getcompanydata")
+      
+      // const {  } = response.data;
+     console.log(response)
+      
+      return response.data;
+    });
+  }catch(err){
+    console.log(err)
+  }
+
+  
   
 
   const [status, setStatus] = useState(0);
   
 
-  const { user } = useContext(LoginContext);
+  
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
@@ -77,13 +88,9 @@ export default function Company() {
   const [company, setCompany] = useState()
   const [cnpj, setCnpj] = useState()
 
-  useEffect(() => {
-    const getCompanyData = async () => {
-      await api.post('getcompanydata', {companyRef: user.companyRef}).then(response => console.log(response))
-    }
-  }, [])
+  
 
-  const handleCreateUser: SubmitHandler<UpdateUserCompany> = async ({
+  const handleAddSecretKey: SubmitHandler<UpdateUserCompany> = async ({
     secret_key
   }) => {
     console.log();
@@ -112,7 +119,7 @@ export default function Company() {
           bg="gray.800"
           p="8"
           mt={5}
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleAddSecretKey)}
         >
           <Heading size="lg" fontWeight="normal">
             Company

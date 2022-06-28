@@ -33,16 +33,16 @@ import { authenticated } from "./login";
 
 export default authenticated (async (request: NextApiRequest, response: NextApiResponse) => {
     
-    if(request.method === 'POST'){
+    if(request.method === 'GET'){
 
 
         console.log("Getting company data")
         const { companyRef } = request.body
         
         try{
-
+            
             const companyData = await fauna.query<DataProps>(
-                q.Get(q.Match(q.Index("company_by_ref"), companyRef))
+                q.Get(q.Ref(q.Collection('companies'), companyRef))
             );
             
             console.log(companyData.data.company, companyData.data.cnpj, companyData.data.email, companyData.data.responsable_name)
@@ -55,7 +55,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
         
 
     }else{
-        response.setHeader('Allow', 'POST')
+        response.setHeader('Allow', 'GET')
         response.status(405).end('Method not allowed')
     }
 })
