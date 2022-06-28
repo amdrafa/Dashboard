@@ -122,7 +122,7 @@ export default function DriverLicence() {
 
           <Divider my="6" borderColor="gray.700" />
 
-          {(user && defaultRegister_number) ? (
+          {(user || defaultRegister_number) ? (
             <>
               <VStack spacing="8">
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
@@ -151,7 +151,7 @@ export default function DriverLicence() {
                     </Text>
                   </Box>
                   <Input
-                    defaultValue={defaultExpires_at}
+                    defaultValue={defaultRegister_number ? (defaultExpires_at.toString()) : '' }
                     name="expires_at"
                     type="date"
                     label="Expires at"
@@ -169,11 +169,11 @@ export default function DriverLicence() {
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                  
+                <Link href="/configurations">
                     <Button colorScheme="whiteAlpha">
                       Cancel
                     </Button>
-                  
+                  </Link>
                   <Button
                     isLoading={formState.isSubmitting}
                     type="submit"

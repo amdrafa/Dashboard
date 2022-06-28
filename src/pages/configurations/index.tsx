@@ -68,6 +68,15 @@ export default function Configurations() {
                 }}
                 isActive={false}
               />
+
+              <ChooseConfig
+                icon={BiBuilding}
+                vehicleType="Company informations"
+                onClick={() => {
+                  Router.push("/configurations/company");
+                }}
+                isActive={false}
+              />
             </SimpleGrid>
           </VStack>
         </Box>
