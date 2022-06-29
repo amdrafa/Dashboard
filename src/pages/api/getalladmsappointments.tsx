@@ -52,8 +52,8 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             const per_page = 6
             
             const slicedData = () => {
-                const pageStart = (Number(page) - 1)*(per_page)
-                const pageEnd = pageStart + per_page
+                const pageStart = (Number(page) - 1)*(Number(per_page))
+                const pageEnd = pageStart + Number(per_page)
                 const mySlicedData = data.slice(pageStart,pageEnd)
                 
                 

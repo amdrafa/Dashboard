@@ -98,7 +98,7 @@ import {
         <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6">
           <Sidebar />
   
-          <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight} p="8" mt={5}>
+          <Box flex="1" borderRadius={8} bg="gray.800" height="100%" p="8" mt={5}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 Speedway list
@@ -180,13 +180,13 @@ import {
                   </Tbody>
                 </Table>
                 <Pagination 
-                totalCountOfRegisters={total + 3}
+                totalCountOfRegisters={total}
                 currentPage={page}
                 onPageChanges={setPage}
                 />
                 
               </>) : (<Flex w="100%" mt={"110px"} justifyContent="center"> 
-                <Box justifyContent="center">
+                <Box justifyContent="center" mb={"36"}>
                     <Flex w="100%" justifyContent="center">
                         <Text fontSize={22} fontWeight="bold">There is not any speedway registered.</Text>         
                     </Flex>

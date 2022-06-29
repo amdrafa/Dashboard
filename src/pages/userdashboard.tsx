@@ -174,7 +174,7 @@ export default function Dashboard() {
           >
             <Box p={["6", "8"]} bg="gray.800" borderRadius={8} pb="4">
               <Text fontSize="lg" mb="4">
-                New customers
+                Month appointments
               </Text>
               <Chart
                 options={options}
@@ -204,12 +204,10 @@ export default function Dashboard() {
             flex="1"
             borderRadius={8}
             bg="gray.800"
-            p="8"
-            ml={8} 
+            p="8" 
             mt={20}
             mb={20}
-            mr={"38px"}
-            maxWidth={1400}
+            maxWidth={1600}
             
           >
             <Flex mb="8" justify="space-between" align="center">
@@ -303,7 +301,7 @@ export default function Dashboard() {
                   onPageChanges={setPage}
                 />
               </>) : (<Flex w="100%" justifyContent="center"> 
-                <Box justifyContent="center">
+                <Box justifyContent="center" my={10}>
                     <Flex w="100%" justifyContent="center">
                         <Text fontSize={22} fontWeight="bold">You still don't have any appointment.</Text>         
                     </Flex>

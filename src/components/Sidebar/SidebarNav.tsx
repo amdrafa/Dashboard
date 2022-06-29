@@ -5,6 +5,7 @@ import { BsSpeedometer2 } from "react-icons/bs";
 import {BiBuilding} from "react-icons/bi";
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
+import { MdOutlineBadge } from "react-icons/md";
 
 export function SidebarNav(){
     return (
@@ -19,10 +20,11 @@ export function SidebarNav(){
                     <NavLink hrefs="/speedways" icon={BsSpeedometer2}>Speedways</NavLink>
                 </NavSection>
 
-                <NavSection title="REPORTS">
-                    <NavLink hrefs="/configurations" icon={VscSettingsGear}>Configurations</NavLink>
-                    <NavLink hrefs="/Generate" icon={RiInputMethodLine}>Generate</NavLink>
-                    <NavLink hrefs="/Events" icon={RiGitMergeLine}>Events</NavLink>
+                <NavSection title="CONFIGURATIONS">
+                    <NavLink hrefs="/settings" icon={VscSettingsGear}>Settings</NavLink>
+                    <NavLink hrefs="/driverlicence" icon={MdOutlineBadge}>Driver Licence</NavLink>
+                    <NavLink hrefs="/company" icon={BiBuilding}>Company</NavLink>
+                    
                 </NavSection>
             </Stack>
     );

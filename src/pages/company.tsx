@@ -11,16 +11,16 @@ import {
   Spinner,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { Input } from "../../components/Form/input";
-import { Header } from "../../components/Header";
-import { Sidebar } from "../../components/Sidebar";
+import { Input } from "../components/Form/input";
+import { Header } from "../components/Header";
+import { Sidebar } from "../components/Sidebar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { api } from "../../services/axios";
+import { api } from "../services/axios";
 import Router from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../../contexts/LoginContext";
+import { LoginContext } from "../contexts/LoginContext";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 
@@ -122,7 +122,12 @@ export default function Company() {
 
           {!(user?.companyRef == "") ? (
             <>
-              <VStack spacing="8">
+              {company == "" ? (
+                <Flex justify="center">
+                <Spinner mt="110px" mb="110px" />
+              </Flex>
+              ) : (
+                <VStack spacing="8">
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
                   <Input
                     isDisabled={true}
@@ -165,10 +170,11 @@ export default function Company() {
                   />
                 </SimpleGrid>
               </VStack>
+              )}
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                <Link href="/configurations">
+                <Link href="/userdashboard">
                     <Button colorScheme="whiteAlpha">
                       Cancel
                     </Button>
@@ -216,7 +222,7 @@ export default function Company() {
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                  <Link href="/configurations">
+                  <Link href="/userdashboard">
                     <Button colorScheme="whiteAlpha">Cancel</Button>
                   </Link>
                   <Button

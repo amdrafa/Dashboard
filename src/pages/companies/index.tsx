@@ -193,7 +193,7 @@ export default function CompanyList() {
                 </Tbody>
               </Table>
               <Pagination 
-              totalCountOfRegisters={total + 3}
+              totalCountOfRegisters={total + 2}
               currentPage={page}
               onPageChanges={setPage}
               />

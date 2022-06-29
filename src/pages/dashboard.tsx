@@ -196,7 +196,7 @@ export default function Dashboard() {
 
 
 
-          <Box flex="1" borderRadius={8} bg="gray.800" p="8" ml={8} mt={20} mb={20} mr={"38px"} maxWidth={1400}>
+          <Box flex="1" borderRadius={8} bg="gray.800" p="8"  mt={20} mb={20} maxWidth={1600}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 All Appointments
@@ -283,12 +283,12 @@ export default function Dashboard() {
                   </Tbody>
                 </Table>
                 <Pagination
-                  totalCountOfRegisters={total + 1}
+                  totalCountOfRegisters={total}
                   currentPage={page}
                   onPageChanges={setPage}
-                />
+                />  
               </>) : (<Flex w="100%" justifyContent="center"> 
-                <Box justifyContent="center">
+                <Box justifyContent="center" my={10}>
                     <Flex w="100%" justifyContent="center">
                         <Text fontSize={22} fontWeight="bold">Nobody scheduled an appointment.</Text>         
                     </Flex>
