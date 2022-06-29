@@ -24,56 +24,53 @@ import { LoginContext } from "../../contexts/LoginContext";
 import { toast } from "react-toastify";
 import { useQuery } from "react-query";
 
-type UpdateUserCompany= {
+type UpdateUserCompany = {
   secret_key: string;
 };
 
-
 type CompanyDataProps = {
-  data: {
-    company:string;
+    company_name: string;
     cnpj: string;
     responsable_name: string;
     email: string;
-
-  }
 };
-
 
 const createUserFormSchema = yup.object().shape({
   secret_key: yup.string().required(),
-  
 });
 
 export default function Company() {
-
   const { user } = useContext(LoginContext);
 
 
-  try{
-    
-    const { data, isLoading, error } = useQuery<CompanyDataProps>(`companyConfig`, async () => {
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
-      
-        const response = await api.get("getcompanydata")
-      
-      // const {  } = response.data;
-     console.log(response)
-      
-      return response.data;
-    });
-  }catch(err){
-    console.log(err)
-  }
+  const [responsableName, setResponsableName] = useState("");
+  const [responsableEmail, setResponsableEmail] = useState("");
+  const [responsablePhone, setResponsablePhone] = useState("");
 
-  
-  
+  const [company, setCompany] = useState("");
+  const [cnpj, setCnpj] = useState("");
+
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    api.get<CompanyDataProps>(`getcompanydata?companyRef=${user?.companyRef}`)
+    .then(response => {
+      console.log(response)
+      setCompany(response.data.company_name)
+      setCnpj(response.data.cnpj)
+
+      setResponsableName(response.data.responsable_name)
+      setResponsableEmail(response.data.email)
+    });
+    
+
+    // use user._id
+  }, [user]);
 
   const [status, setStatus] = useState(0);
-  
-
-  
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
@@ -81,34 +78,30 @@ export default function Company() {
 
   const { errors } = formState;
 
-  const [responsableName, setResponsableName] = useState('')
-  const [responsableEmail, setResponsableEmail] = useState('')
-  const [responsablePhone, setResponsablePhone] = useState('')
-
-  const [company, setCompany] = useState()
-  const [cnpj, setCnpj] = useState()
-
   
-
   const handleAddSecretKey: SubmitHandler<UpdateUserCompany> = async ({
-    secret_key
+    secret_key,
   }) => {
     console.log();
     // Router.push('/speedways')
     try {
       const response = await api
-      .post("connecttonewcompany", { secret_key, userId: user.userId, email: user.email })
-      .then((response) => setStatus(response.status));
+        .post("connecttonewcompany", {
+          secret_key,
+          userId: user.userId,
+          email: user.email,
+        })
+        .then((response) => setStatus(response.status));
     } catch (err) {
       toast.error("Code not found");
     }
   };
 
   return (
-    <Box mt={-3} ml={-4}>
+    <Box mt={-3} >
       <Header />
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6" mb={"14"}>
+      <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6" mb={"14"}>
         <Sidebar />
 
         <Box
@@ -133,80 +126,81 @@ export default function Company() {
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
                   <Input
                     isDisabled={true}
-                    defaultValue='aaaaa'
-                    name="register_number"
+                    defaultValue={responsableName}
+                    name="responsable name"
                     label="Responsable name"
-                    type={"number"}
-                    {...register("register_number")}
-                    error={errors.register_number}
                   />
                 </SimpleGrid>
 
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
                   <Input
                     isDisabled={true}
-                    defaultValue='aaaaa'
-                    name="register_number"
+                    defaultValue={responsableEmail}
+                    name="responsable email"
                     label="E-mail"
-                    type={"number"}
-                    {...register("register_number")}
-                    error={errors.register_number}
                   />
 
                   <Input
                     isDisabled={true}
-                    defaultValue='aaaaa'
-                    name="register_number"
+                    defaultValue="Phone comes here"
+                    name="responsable phone"
                     label="Phone"
                     type={"number"}
-                    {...register("register_number")}
-                    error={errors.register_number}
                   />
                 </SimpleGrid>
 
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
                   <Input
                     isDisabled
-                    defaultValue='aaaaa'
-                    name="driver_category"
+                    defaultValue={company}
+                    name="company"
                     label="Company name"
-                    {...register("driver_category")}
-                    error={errors.driver_category}
-                    maxLength={5}
                   />
 
                   <Input
                     isDisabled
-                    defaultValue='aaaaa'
-                    name="driver_category"
+                    defaultValue={cnpj}
+                    name="cnpj"
                     label="CNPJ"
-                    {...register("driver_category")}
-                    error={errors.driver_category}
-                    maxLength={5}
                   />
                 </SimpleGrid>
               </VStack>
+
+              <Flex mt="8" justify="flex-end">
+                <HStack spacing="4">
+                <Link href="/configurations">
+                    <Button colorScheme="whiteAlpha">
+                      Cancel
+                    </Button>
+                  </Link>
+                  <Button
+                    disabled
+                    colorScheme="blue"
+                  >
+                    Save
+                  </Button>
+                </HStack>
+              </Flex>
             </>
           ) : (
             <>
-            <Box mb={"8"}>
-              <Text fontSize={"2xl"} mb={6}>
+              <Box mb={"8"}>
+                <Text fontSize={"2xl"} mb={6}>
                   Hello, {user?.name}
                 </Text>
-                
-                <Text color={"gray.300"} mb={2} >
-                • The secret code of your company was sent to your manager.
+
+                <Text color={"gray.300"} mb={2}>
+                  • The secret code of your company was sent to your manager.
                 </Text>
                 <Text color={"gray.300"}>
-                • It's obligatory to have secret key to be able to schedule speedways.
+                  • It's obligatory to have secret key to be able to schedule
+                  speedways.
                 </Text>
-                
-               
-            </Box>
-              
+              </Box>
+
               <VStack spacing="8">
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
-                <Box>
+                  <Box>
                     <Input
                       name="secret_key"
                       label="Secret key"
@@ -218,16 +212,12 @@ export default function Company() {
                     </Text>
                   </Box>
                 </SimpleGrid>
-
-               
               </VStack>
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
                   <Link href="/configurations">
-                    <Button  colorScheme="whiteAlpha">
-                      Cancel
-                    </Button>
+                    <Button colorScheme="whiteAlpha">Cancel</Button>
                   </Link>
                   <Button
                     isLoading={formState.isSubmitting}

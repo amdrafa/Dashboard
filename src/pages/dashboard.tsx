@@ -156,7 +156,7 @@ export default function Dashboard() {
       <Box mt={-3}>
         <Header />
 
-        <Flex w="100%" mt="6" maxWidth={1480} mx="auto" px="6">
+        <Flex w="100%" mt="6" maxWidth={1600} mx="auto" px="6">
           <Sidebar />
           <Box w={'100%'} px={6} ml={6}>
             <SimpleGrid

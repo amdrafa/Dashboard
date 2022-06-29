@@ -77,7 +77,7 @@ export default function DriverLicence() {
 
   const { errors } = formState;
 
-  const handleCreateUser: SubmitHandler<UpdateDriverLicenceData> = async ({
+  const handleUpdateDriverLicence: SubmitHandler<UpdateDriverLicenceData> = async ({
     register_number,
     driver_category,
     expires_at,
@@ -100,10 +100,10 @@ export default function DriverLicence() {
   };
 
   return (
-    <Box mt={-3} ml={-4}>
+    <Box mt={-3}>
       <Header />
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+      <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6">
         <Sidebar />
 
         <Box
@@ -114,7 +114,7 @@ export default function DriverLicence() {
           bg="gray.800"
           p="8"
           mt={5}
-          onSubmit={handleSubmit(handleCreateUser)}
+          onSubmit={handleSubmit(handleUpdateDriverLicence)}
         >
           <Heading size="lg" fontWeight="normal">
             Driver licence

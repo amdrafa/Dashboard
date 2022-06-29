@@ -107,7 +107,7 @@ export default function CompanyList() {
     <Box mt={-3}>
       <Header />
 
-      <Flex w="100%" my="6" maxWidth={1480}  mx="auto" px="6">
+      <Flex w="100%" my="6" maxWidth={1600}  mx="auto" px="6">
         <Sidebar />
 
         <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight}  p="8" mt={5}>

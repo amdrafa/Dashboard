@@ -28,10 +28,10 @@ import { BiBuilding } from "react-icons/bi";
 
 export default function Configurations() {
   return (
-    <Box mt={-3} ml={-4}>
+    <Box mt={-3}>
       <Header />
 
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+      <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6">
         <Sidebar />
 
         <Box
