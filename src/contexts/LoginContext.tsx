@@ -108,8 +108,9 @@ export function LoginContextProvider({ children }: authProviderProps) {
   }, [statusRegister]);
 
   useEffect(() => {
+    
     {
-      statusLogin == 200 && Router.push("/dashboard");
+      statusLogin == 200 && Router.push("/settings");
     }
   }, [statusLogin]);
 

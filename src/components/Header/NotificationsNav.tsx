@@ -66,7 +66,7 @@ export function NotificationsNav() {
               <Box>
               
                 {user?.companyRef == '' && (
-                  <Link style={{ textDecoration: 'none' }} href="/configurations" >
+                  <Link style={{ textDecoration: 'none' }} href="/company" >
                   <Flex  alignItems={"center"} borderBottom={'2px'} borderBottomColor={'#333442'} pr={2} py={2}  cursor={'pointer'} _hover={{bg: "#21222c"}}>
                     
 
@@ -87,7 +87,7 @@ export function NotificationsNav() {
                 {user?.driver_expiration?  (
                   ''
                 ) : (
-                  <Link style={{ textDecoration: 'none' }} href="/configurations"  >
+                  <Link style={{ textDecoration: 'none' }} href="/driverlicence"  >
                   <Flex alignItems={"center"} borderBottom={'2px'} borderBottomColor={'#333442'} pr={2} py={2} cursor={'pointer'} _hover={{bg: "#21222c"}}>
 
                   <Flex p={4}>
@@ -107,7 +107,7 @@ export function NotificationsNav() {
 
                 {user?.driver_expiration && (
                   new Date(user?.driver_expiration) <= new Date() ? (
-                    <Link style={{ textDecoration: 'none' }} href="/configurations" > 
+                    <Link style={{ textDecoration: 'none' }} href="/driverlicence" > 
                   <Flex alignItems={"center"} pr={2} py={3}  borderBottom={'2px'} borderBottomColor={'#333442'}  cursor={'pointer'} _hover={{bg: "#21222c"}}>
 
                   <Flex p={4}>
@@ -134,7 +134,7 @@ export function NotificationsNav() {
                   <Icon
                     as={BsCheckCircle}
                     fontSize={40}
-                    color={"green.500"}
+                    color={"blue.500"}
                     mb={3}
                   />
                 </Flex>

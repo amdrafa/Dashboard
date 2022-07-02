@@ -130,7 +130,7 @@ export default function Dashboard() {
 
   const [limit, setLimit] = useState(5);
 
-  const [total, setTotal] = useState(1);
+  const [total, setTotal] = useState(-1);
 
   const [companies, setCompanies] = useState<appointmentsDataProps[]>([]);
 
@@ -300,7 +300,13 @@ export default function Dashboard() {
                   currentPage={page}
                   onPageChanges={setPage}
                 />
-              </>) : (<Flex w="100%" justifyContent="center"> 
+              </>) : (
+                total == -1 ? (
+                  <Flex justify="center">
+                <Spinner mt="10" mb="80px" />
+              </Flex>
+                ) : (
+                  (<Flex w="100%" justifyContent="center"> 
                 <Box justifyContent="center" my={10}>
                     <Flex w="100%" justifyContent="center">
                         <Text fontSize={22} fontWeight="bold">You still don't have any appointment.</Text>         
@@ -310,6 +316,8 @@ export default function Dashboard() {
                 </Flex> 
                 </Box>
               </Flex>)
+                )
+              )
             )}
           </Box>
 

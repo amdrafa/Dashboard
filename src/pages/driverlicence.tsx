@@ -48,15 +48,18 @@ export default function DriverLicence() {
     
     const response = api.get<UpdateDriverLicenceData>('mydriverlicence')
     .then(response => {
+
+      const day = new Date(response.data.expires_at).getDate().toString().slice(0,2).length > 1 ? (new Date(response.data.expires_at).getDate().toString().slice(0,2)) : ('0' + new Date(response.data.expires_at).getDate().toString().slice(0,2))
+
       setDefaultRegister_number(response.data.register_number)
       setDefaultDriver_category(response.data.driver_category)
-      setDefaultExpires_at((new Date(response.data.expires_at).getFullYear().toString()) + "-" + ("0" + (new Date(response.data.expires_at).getMonth() + 1)).slice(-2) + "-" + (new Date(response.data.expires_at).getDate().toString().slice(0,2)))
+      setDefaultExpires_at((new Date(response.data.expires_at).getFullYear().toString()) + "-" + ("0" + (new Date(response.data.expires_at).getMonth() + 1)).slice(-2) + "-" + day)
       
       console.log(("0" + (new Date().getMonth() + 1)).slice(-2))
       
-     
+     console.log((new Date(response.data.expires_at).getFullYear().toString()) + "-" + ("0" + (new Date(response.data.expires_at).getMonth() + 1)).slice(-2) + "-" + (new Date(response.data.expires_at).getDate().toString().slice(0,2)))
       
-      console.log(new Date(response.data.expires_at).getDate().toString().slice(0,2))
+      console.log('0' + new Date(response.data.expires_at).getDate().toString().slice(0,2))
       
     })
     .catch(error => console.log(error))
@@ -122,7 +125,7 @@ export default function DriverLicence() {
 
           <Divider my="6" borderColor="gray.700" />
 
-          {(!user || defaultRegister_number) ? (
+          {(user) ? (
             <>
               <VStack spacing="8">
                 <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
@@ -151,7 +154,7 @@ export default function DriverLicence() {
                     </Text>
                   </Box>
                   <Input
-                    defaultValue={defaultRegister_number ? (defaultExpires_at.toString()) : '' }
+                    defaultValue={defaultRegister_number ? (defaultExpires_at.toString()) : '10-04-22' }
                     name="expires_at"
                     type="date"
                     label="Expires at"

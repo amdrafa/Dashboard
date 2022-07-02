@@ -10,7 +10,7 @@ interface NavSectionProps{
 
 export function NavSection({title, children}: NavSectionProps) {
   return (
-    <Box>
+    <Box mt={4}>
       <Text fontWeight="bold" color="gray.400" fontSize="small">
         {title}
       </Text>

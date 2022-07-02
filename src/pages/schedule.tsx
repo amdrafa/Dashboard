@@ -40,6 +40,7 @@ import Router from "next/router";
 import { errors } from "faunadb";
 import { ChooseVehicle } from "../components/ChooseVehicle";
 import { useQuery } from "react-query";
+import { toast } from "react-toastify";
 
 interface speedwayProps{
   speedway: string;
@@ -61,7 +62,7 @@ export default function Schedule() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
-
+  const [status, setStatus] = useState(0)
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -69,13 +70,16 @@ export default function Schedule() {
   const [speedwayList, setSpeedwayList] = useState<speedwayProps>();
 
   const { isAuthenticated, user } = useContext(LoginContext)
+
+  useEffect(() => {
+    status == 200 && toast.success("Appointment scheduled") 
+    setStatus(0)
+  }, [status])
   
   
   const { data, isLoading, error } = useQuery<dataProps[]>(`SpeedwayList`, async () => {
     const response = await api.get(`getspeedwaylist`)
     const {speedways} = response.data;
-    
-    
     
     return speedways;
   });
@@ -107,7 +111,14 @@ export default function Schedule() {
     
     event.preventDefault()
     console.log(user.userId)
-    const response = await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
+    await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
+    .then(response => setStatus(response.status))
+
+    setVehicle('Light vehicle')
+    setSpeedway('Select option')
+    setStartDate(new Date())
+    setEndDate(new Date())
+    
     
   }
   return (

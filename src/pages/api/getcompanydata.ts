@@ -26,6 +26,7 @@ type DataProps = {
     cnpj: string;
     responsable_name: string;
     email: string;
+    phone: string;
   };
 };
 
@@ -34,20 +35,17 @@ export default authenticated(
     if (request.method === "GET") {
 
 
-      console.log("Getting company dataAAAAAAAAA");
+      console.log("Getting company data");
 
       const companyRef = request.query["companyRef"];
+
+      if(!companyRef){
+        return response.status(200).json({ Message: "Waiting parameters" });
+      }
 
       try {
         const companyData = await fauna.query<DataProps>(
           q.Get(q.Ref(q.Collection("companies"), companyRef))
-        );
-
-        console.log(
-          companyData.data.company,
-          companyData.data.cnpj,
-          companyData.data.email,
-          companyData.data.responsable_name
         );
 
         return response
@@ -57,9 +55,10 @@ export default authenticated(
             email: companyData.data.email,
             company_name: companyData.data.responsable_name,
             cnpj: companyData.data.cnpj,
+            phone: companyData.data.phone
           });
       } catch (err) {
-        console.log("error when getting company data ", err);
+        console.log("error when getting company data ");
         return response.status(400).json({ error: err });
       }
     } else {

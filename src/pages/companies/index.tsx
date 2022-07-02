@@ -82,26 +82,6 @@ export default function CompanyList() {
     return ReturnedData;
   });
 
-  useEffect(() => {
-    let personPerPage = 0
-    
-    console.log(data)
-    {data? (data.forEach((company) => {
-      personPerPage = personPerPage + 1
-      console.log(personPerPage)
-    })) : ('') }
-
-    switch(personPerPage){
-      case 1: 
-        setNeedsLessHeight('320px')
-        break;
-      case 2: 
-        setNeedsLessHeight('400px')
-        break;
-      default: setNeedsLessHeight('')
-    }
-  }, [setPage, page, data ])
-
 
   return (
     <Box mt={-3}>
@@ -110,7 +90,7 @@ export default function CompanyList() {
       <Flex w="100%" my="6" maxWidth={1600}  mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={8} bg="gray.800" height={needsLessHeight}  p="8" mt={5}>
+        <Box flex="1" borderRadius={8} bg="gray.800" height='100%'  p="8" mt={5}>
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Company list
@@ -131,7 +111,7 @@ export default function CompanyList() {
 
           {isLoading ? (
             <Flex justify="center">
-              <Spinner mt="110px" />
+              <Spinner mt="70px" mb="110px" />
             </Flex>
           ) : error ? (
             <Flex justify="center">
@@ -193,7 +173,7 @@ export default function CompanyList() {
                 </Tbody>
               </Table>
               <Pagination 
-              totalCountOfRegisters={total + 2}
+              totalCountOfRegisters={total}
               currentPage={page}
               onPageChanges={setPage}
               />

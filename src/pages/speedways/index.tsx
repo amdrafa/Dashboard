@@ -119,7 +119,7 @@ import {
   
             {isLoading ? (
               <Flex justify="center">
-                <Spinner mt="110px" />
+                <Spinner mt="70px" mb="110px" />
               </Flex>
             ) : error ? (
               <Flex justify="center">

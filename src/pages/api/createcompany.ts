@@ -17,7 +17,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
         mail.setApiKey(process.env.SENDGRID_API_KEY)
 
-        const {data:company, cnpj, responsable_name, email} = request.body
+        const {data:company, cnpj, responsable_name, email, phone, hours} = request.body
 
         const {secret: companySecretKey} = secretKey.create(cnpj)
 
@@ -49,7 +49,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             await fauna.query(
                 q.Create(
                     q.Collection('companies'),
-                    { data: {company, cnpj, responsable_name, email, companySecretKey, createdAt} }
+                    { data: {company, cnpj, responsable_name, email, phone, avaiableHours: hours, companySecretKey, createdAt} }
                 )
             )
 

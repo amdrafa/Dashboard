@@ -29,10 +29,11 @@ type UpdateUserCompany = {
 };
 
 type CompanyDataProps = {
-    company_name: string;
-    cnpj: string;
-    responsable_name: string;
-    email: string;
+  company_name: string;
+  cnpj: string;
+  responsable_name: string;
+  email: string;
+  phone: string;
 };
 
 const createUserFormSchema = yup.object().shape({
@@ -42,6 +43,7 @@ const createUserFormSchema = yup.object().shape({
 export default function Company() {
   const { user } = useContext(LoginContext);
 
+  const [status, setStatus] = useState(0);
 
   const [responsableName, setResponsableName] = useState("");
   const [responsableEmail, setResponsableEmail] = useState("");
@@ -50,27 +52,35 @@ export default function Company() {
   const [company, setCompany] = useState("");
   const [cnpj, setCnpj] = useState("");
 
-
   useEffect(() => {
-    if (!user) {
-      return;
-    }
+    
+      if ((company == "") && !(user?.companyRef == "")) {
+        api
+          .get<CompanyDataProps>(
+            `getcompanydata?companyRef=${user?.companyRef}`
+          )
+          .then((response) => {
+            console.log(response);
+            setCompany(response.data.company_name);
+            setCnpj(response.data.cnpj);
 
-    api.get<CompanyDataProps>(`getcompanydata?companyRef=${user?.companyRef}`)
-    .then(response => {
-      console.log(response)
-      setCompany(response.data.company_name)
-      setCnpj(response.data.cnpj)
-
-      setResponsableName(response.data.responsable_name)
-      setResponsableEmail(response.data.email)
-    });
+            setResponsableName(response.data.responsable_name);
+            setResponsableEmail(response.data.email);
+            setResponsablePhone(response.data.phone)
+          });
+      }
     
 
     // use user._id
   }, [user]);
 
-  const [status, setStatus] = useState(0);
+  useEffect(() => {
+    if(status == 200){
+      Router.push('userdashboard')
+    }
+  }, [status])
+
+  
 
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(createUserFormSchema),
@@ -78,7 +88,6 @@ export default function Company() {
 
   const { errors } = formState;
 
-  
   const handleAddSecretKey: SubmitHandler<UpdateUserCompany> = async ({
     secret_key,
   }) => {
@@ -88,8 +97,8 @@ export default function Company() {
       const response = await api
         .post("connecttonewcompany", {
           secret_key,
-          userId: user.userId,
-          email: user.email,
+          userId: user?.userId,
+          email: user?.email,
         })
         .then((response) => setStatus(response.status));
     } catch (err) {
@@ -98,7 +107,7 @@ export default function Company() {
   };
 
   return (
-    <Box mt={-3} >
+    <Box mt={-3}>
       <Header />
 
       <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6" mb={"14"}>
@@ -124,65 +133,59 @@ export default function Company() {
             <>
               {company == "" ? (
                 <Flex justify="center">
-                <Spinner mt="110px" mb="110px" />
-              </Flex>
+                  <Spinner mt="110px" mb="110px" />
+                </Flex>
               ) : (
                 <VStack spacing="8">
-                <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
-                  <Input
-                    isDisabled={true}
-                    defaultValue={responsableName}
-                    name="responsable name"
-                    label="Responsable name"
-                  />
-                </SimpleGrid>
+                  <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
+                    <Input
+                      isDisabled={true}
+                      defaultValue={responsableName}
+                      name="responsable name"
+                      label="Responsable name"
+                    />
+                  </SimpleGrid>
 
-                <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
-                  <Input
-                    isDisabled={true}
-                    defaultValue={responsableEmail}
-                    name="responsable email"
-                    label="E-mail"
-                  />
+                  <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
+                    <Input
+                      isDisabled={true}
+                      defaultValue={responsableEmail}
+                      name="responsable email"
+                      label="E-mail"
+                    />
 
-                  <Input
-                    isDisabled={true}
-                    defaultValue="Phone comes here"
-                    name="responsable phone"
-                    label="Phone"
-                    type={"number"}
-                  />
-                </SimpleGrid>
+                    <Input
+                      isDisabled={true}
+                      defaultValue={responsablePhone}
+                      name="responsable phone"
+                      label="Phone"
+                    />
+                  </SimpleGrid>
 
-                <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
-                  <Input
-                    isDisabled
-                    defaultValue={company}
-                    name="company"
-                    label="Company name"
-                  />
+                  <SimpleGrid minChildWidth="240px" spacing="8" w="100%" mb={4}>
+                    <Input
+                      isDisabled
+                      defaultValue={company}
+                      name="company"
+                      label="Company name"
+                    />
 
-                  <Input
-                    isDisabled
-                    defaultValue={cnpj}
-                    name="cnpj"
-                    label="CNPJ"
-                  />
-                </SimpleGrid>
-              </VStack>
+                    <Input
+                      isDisabled
+                      defaultValue={cnpj}
+                      name="cnpj"
+                      label="CNPJ"
+                    />
+                  </SimpleGrid>
+                </VStack>
               )}
 
               <Flex mt="8" justify="flex-end">
                 <HStack spacing="4">
-                <Link href="/userdashboard">
-                    <Button colorScheme="whiteAlpha">
-                      Cancel
-                    </Button>
+                  <Link href="/userdashboard">
+                    <Button colorScheme="whiteAlpha">Cancel</Button>
                   </Link>
-                  <Button
-                    disabled
-                    colorScheme="blue"
-                  >
+                  <Button disabled colorScheme="blue">
                     Save
                   </Button>
                 </HStack>

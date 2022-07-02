@@ -43,6 +43,7 @@ interface appointmentProps {
   startDate: string;
   endDate: string;
   vehicle: string;
+  userId: string;
 }
 
 const Chart = dynamic(async () => await import("react-apexcharts"), {
@@ -240,11 +241,15 @@ export default function Dashboard() {
                 <Table colorScheme="whiteAlpha">
                   <Thead>
                     <Tr>
-                      <Th px={["4", "4", "6"]} color="gray.300" width="">
+                      <Th px={["4", "4", "6"]} color="gray.300" >
                         <Text>Speedway</Text>
                       </Th>
 
-                      <Th px={["4", "4", "6"]} width="">
+                      <Th px={["4", "4", "6"]} >
+                        <Text>Company</Text>
+                      </Th>
+
+                      <Th px={["4", "4", "6"]}>
                         <Text>From</Text>
                       </Th>
 
@@ -252,7 +257,7 @@ export default function Dashboard() {
 
                       {isWideVersioon && <Th>Vehicle</Th>}
                       <Th px={["4", "4", "6"]} width="">
-                        <Text>Status</Text>
+                        
                       </Th>
 
                       
@@ -266,6 +271,11 @@ export default function Dashboard() {
                         </Td>
                         <Td>
                           <Text>
+                            {appointment.data.userId}
+                          </Text>
+                        </Td>
+                        <Td>
+                          <Text>
                             {new Date(appointment.data.startDate).toLocaleDateString()}
                           </Text>
                         </Td>
@@ -273,10 +283,17 @@ export default function Dashboard() {
 
                         {isWideVersioon && <Td>{appointment.data.vehicle}</Td>}
 
-                        <Td> 
-                            <Flex >
-                                <Icon color={"blue.500"} ml={4} as={GiConfirmed} fontSize="20" />
-                            </Flex>
+                        <Td display={'flex'} justifyContent={'right'}> 
+                        <Button
+                        as="a"
+                        size="sm"
+                        fontSize="sm"
+                        colorScheme="gray"
+                        color="gray.900"
+                        leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                      >
+                        Edit
+                      </Button>
                         </Td>
                       </Tr>
                     ))}
