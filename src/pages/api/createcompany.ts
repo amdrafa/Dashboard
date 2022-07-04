@@ -44,7 +44,6 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 year: 'numeric'
             })
 
-            console.log(createdAt + 'passou aq')
 
             await fauna.query(
                 q.Create(
@@ -55,10 +54,10 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
 
             mail.send(emailData)
 
-            return true
+            return response.status(200).json({message: 'Company created'})
         }catch(err){
             console.log('error when creating company', err)
-            return false
+            return response.status(400).json({message: 'Something went wrong'})
         }
         
 

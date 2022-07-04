@@ -35,11 +35,10 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 )
             )
 
-
-            return true
+            return response.status(200).json({message: 'Company created'})
         }catch(err){
             console.log('error when creating speedway', err)
-            return false
+            return response.status(400).json({message: 'Something went wrong'})
         }
         
 

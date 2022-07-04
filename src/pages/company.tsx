@@ -76,7 +76,8 @@ export default function Company() {
 
   useEffect(() => {
     if(status == 200){
-      Router.push('userdashboard')
+      toast.success('Connected to company')
+      window.location.reload()
     }
   }, [status])
 

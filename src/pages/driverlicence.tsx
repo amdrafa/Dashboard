@@ -69,7 +69,7 @@ export default function DriverLicence() {
 
 
   useEffect(() => {
-    status == 200 && Router.push("/userdashboard");
+    status == 200 && toast.success('Driver licence updated')
   }, [status]);
 
   const { user } = useContext(LoginContext);
@@ -154,7 +154,7 @@ export default function DriverLicence() {
                     </Text>
                   </Box>
                   <Input
-                    defaultValue={defaultRegister_number ? (defaultExpires_at.toString()) : '10-04-22' }
+                    defaultValue={defaultExpires_at.toString()}
                     name="expires_at"
                     type="date"
                     label="Expires at"

@@ -8,6 +8,7 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup' 
 import { api } from "../../services/axios";
 import Router from "next/router";
+import { toast } from "react-toastify";
 
 type CreateUserFormData = {
     company: string;
@@ -30,7 +31,7 @@ type CreateUserFormData = {
 
 export default function CreateCompany(){
 
-    const { register, handleSubmit, formState } = useForm({
+    const { register, handleSubmit, formState, resetField } = useForm({
         resolver: yupResolver(createUserFormSchema)
     })
 
@@ -39,11 +40,24 @@ export default function CreateCompany(){
     const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email, phone, hours }) => {
         
         console.log(company, cnpj, responsable_name, email)
-        Router.push('/companies')
+
         await api.post('createcompany', {data: company, cnpj, responsable_name, email, phone, hours})
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
-        
+        .then(response => {
+
+            toast.success('Company created')
+
+            resetField('company')
+            resetField('cnpj')
+            resetField('responsable_name')
+            resetField('email')
+            resetField('phone')
+            resetField('hours')
+
+        })
+        .catch(err => {
+            toast.error('Company already exists')
+        })
+         
     }
 
     return (
@@ -71,7 +85,7 @@ export default function CreateCompany(){
                         </SimpleGrid>
 
                         <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
-                            <Input name="phone" label="Phone" {...register('phone')} error={errors.phone} autoComplete={'off'}/>
+                            <Input name="phone" label="Phone" type={'number'} {...register('phone')} error={errors.phone} autoComplete={'off'}/>
                             <Input name="hours" label="Contracted hours" {...register('hours')} error={errors.hours} maxLength={3} autoComplete={'off'}/>
                         </SimpleGrid>
                     </VStack>

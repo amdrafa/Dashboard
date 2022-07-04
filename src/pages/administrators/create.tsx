@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { LoginContext } from "../../contexts/LoginContext";
 import { api } from "../../services/axios";
 import Router from "next/router";
+import { toast } from "react-toastify";
 
 type CreateAdmFormData = {
     name: string;
@@ -28,7 +29,7 @@ type CreateAdmFormData = {
 
 export default function CreateAdm(){
 
-    const { register, handleSubmit, formState } = useForm({
+    const { register, handleSubmit, formState, resetField } = useForm({
         resolver: yupResolver(createUserFormSchema)
     })
 
@@ -48,8 +49,14 @@ export default function CreateAdm(){
                 createdBy: user.userId
             })
 
-            Router.push('/administrators')
+            toast.success('Administrator created')
+            resetField('name')
+            resetField('email')
+            resetField('cpf')
+            resetField('role')
+            
         }catch(err){
+            toast.error('E-mail already registered')
             console.log(err)
         }
         
@@ -70,7 +77,7 @@ export default function CreateAdm(){
 
                     <VStack spacing="8">
                         <SimpleGrid minChildWidth="240px" spacing="8" w="100%">
-                            <Input name="name" label="Full name" {...register('name')} error={errors.name} />
+                            <Input name="name" label="Full name" {...register('name')} error={errors.name}  />
                             <Input name="email" label="E-mail" type={"email"} {...register('email')} error={errors.email}/>
                         </SimpleGrid>
 

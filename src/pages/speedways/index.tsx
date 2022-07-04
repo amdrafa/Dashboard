@@ -43,12 +43,21 @@ import {
   
   
   export default function Speedwaylist() {
-      
+
+    let test = false
+  
+    function handleEditSpeedway({speedway, vehicles_limit, createdAt, description }): speedwayProps{
+      test = true
+      console.log(speedway, vehicles_limit, createdAt, description)
+      return ;
+    }
+
+
     const isWideVersioon = useBreakpointValue({
       base: false,
       lg: true,
     });
-  
+
     const [page, setPage] = useState(1);
   
     const [limit, setLimit] = useState(5);
@@ -70,25 +79,6 @@ import {
       return ReturnedData;
     });
 
-    useEffect(() => {
-      let personPerPage = 0
-      
-      console.log(data)
-      {data? (data.forEach((company) => {
-        personPerPage = personPerPage + 1
-        console.log(personPerPage)
-      })) : ('') }
-  
-      switch(personPerPage){
-        case 1: 
-          setNeedsLessHeight('310px')
-          break;
-        case 2: 
-          setNeedsLessHeight('400px')
-          break;
-        default: setNeedsLessHeight('')
-      }
-    }, [setPage, page, data ])
   
   
     return (
@@ -144,33 +134,36 @@ import {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    {data.map((speedway) => (
-                      <Tr key={speedway.ts}>
+                    {data.map((speed) => (
+                      <Tr key={speed.ts}>
                         <Td px={["4", "4", "6"]}>
-                          <Text>{speedway.data.speedway}</Text>
+                          <Text>{speed.data.speedway}</Text>
                         </Td>
                         <Td>
                           <Box>
                             <Text fontWeight="bold">
-                            {speedway.data.vehicles_limit}
+                            {speed.data.vehicles_limit}
                             </Text>
                             <Text fontSize="sm" color="gray.300">
                               
                             </Text>
                           </Box>
                         </Td>
-                        {isWideVersioon && <Td>{speedway.data.description}</Td>}
+                        {isWideVersioon && <Td>{speed.data.description}</Td>}
   
                        
   
-                        <Td>
+                        <Td onClick={() => {
+                              handleEditSpeedway({speedway: speed.data.speedway, createdAt: speed.data.createdAt, description: speed.data.description, vehicles_limit: speed.data.vehicles_limit})
+                            }}>
                           <Button
-                            as="a"
+                            
                             size="sm"
                             fontSize="sm"
                             colorScheme="gray"
                             color="gray.900"
-                            leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
+                            leftIcon={<Icon as={RiPencilLine} fontSize="16" 
+                            />}
                           >
                             Edit
                           </Button>

@@ -155,7 +155,7 @@ import {
               </Tbody>
             </Table>
             <Pagination
-              totalCountOfRegisters={total + 3}
+              totalCountOfRegisters={total}
               currentPage={page}
               onPageChanges={setPage}
             />

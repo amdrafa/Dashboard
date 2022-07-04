@@ -108,11 +108,22 @@ export default function Schedule() {
   console.log(startDate, endDate, speedway, vehicle);
 
   async function CreateSchedule(event:FormEvent) {
-    
+
     event.preventDefault()
+
+    if(speedway  == ''){
+      toast.error('Complete all required fields')
+      return;
+    }
+    
+    
     console.log(user.userId)
     await api.post('scheduletime', {startDate, endDate, vehicle, speedway, userId: user.userId})
     .then(response => setStatus(response.status))
+    .catch(err => {
+      console.log(err)
+      toast.error('Something went wrong')
+    })
 
     setVehicle('Light vehicle')
     setSpeedway('Select option')
