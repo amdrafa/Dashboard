@@ -62,7 +62,7 @@ export default function Settings() {
   const [status, setStatus] = useState(0);
 
   useEffect(() => {
-    status == 200 && Router.push("/userdashboard");
+    status == 200 && toast.success('Informations updated');
   }, [status]);
 
   const { user } = useContext(LoginContext);

@@ -1,7 +1,6 @@
 import {
     Box,
     Button,
-    Checkbox,
     Flex,
     Heading,
     Icon,
@@ -15,22 +14,24 @@ import {
     useBreakpointValue,
     Spinner,
   } from "@chakra-ui/react";
-  import { query as q } from "faunadb";
-  import { GetServerSideProps } from "next";
   import Link from "next/link";
-  import { useEffect, useState } from "react";
+  import { useState } from "react";
   import { RiAddLine, RiPencilLine } from "react-icons/ri";
   import { Header } from "../../components/Header";
   import { Pagination } from "../../components/Pagination";
   import { Sidebar } from "../../components/Sidebar";
   import { api } from "../../services/axios";
-  import { fauna } from "../../services/fauna";
   import { useQuery } from "react-query";
-  import ReactPaginate from 'react-paginate'
+import EditSpeedway from "../../components/editSpeedway";
+
   
   interface speedwayDataProps {
     data: speedwayProps;
-    ref: string;
+    ref: {
+      "@ref": {
+        id: number;
+      }
+    }
     ts: number;
   }
   
@@ -44,11 +45,22 @@ import {
   
   export default function Speedwaylist() {
 
-    let test = false
+    const [isEditMode, setIsEditMode] = useState(false)
+
+    const [speedway, setSpeedway] = useState('')
+    const [speedwayId, setSpeedwayId] = useState('')
+    const [vehicles_limit, setVehiclesLimit] = useState(0)
+    const [description, setDescription] = useState('')
   
-    function handleEditSpeedway({speedway, vehicles_limit, createdAt, description }): speedwayProps{
-      test = true
-      console.log(speedway, vehicles_limit, createdAt, description)
+    function handleEditSpeedway({speedway, vehicles_limit, createdAt, description, speedwayId }): speedwayProps{
+      
+      setSpeedway(speedway)
+      setVehiclesLimit(vehicles_limit)
+      setDescription(description)
+      setSpeedwayId(speedwayId)
+
+      setIsEditMode(true)
+
       return ;
     }
 
@@ -63,8 +75,6 @@ import {
     const [limit, setLimit] = useState(5);
   
     const [total, setTotal] = useState(1);
-  
-    const [speedway, setSpeedway] = useState<speedwayDataProps[]>([]);
 
     const [needsLessHeight, setNeedsLessHeight] = useState('');
   
@@ -79,7 +89,7 @@ import {
       return ReturnedData;
     });
 
-  
+    console.log(data)
   
     return (
       <Box mt={-3}>
@@ -88,7 +98,16 @@ import {
         <Flex w="100%" my="6" maxWidth={1600} mx="auto" px="6">
           <Sidebar />
   
-          <Box flex="1" borderRadius={8} bg="gray.800" height="100%" p="8" mt={5}>
+          {isEditMode ? (
+            <EditSpeedway
+            speedway={speedway}
+            description={description}
+            vehicles_limit={vehicles_limit}
+            speedwayId={speedwayId}
+            setIsEditMode={setIsEditMode}
+            />
+          ) : (
+            <Box flex="1" borderRadius={8} bg="gray.800" height="100%" p="8" mt={5}>
             <Flex mb="8" justify="space-between" align="center">
               <Heading size="lg" fontWeight="normal">
                 Speedway list
@@ -154,7 +173,8 @@ import {
                        
   
                         <Td onClick={() => {
-                              handleEditSpeedway({speedway: speed.data.speedway, createdAt: speed.data.createdAt, description: speed.data.description, vehicles_limit: speed.data.vehicles_limit})
+                            
+                              handleEditSpeedway({speedway: speed.data.speedway, createdAt: speed.data.createdAt, description: speed.data.description, vehicles_limit: speed.data.vehicles_limit, speedwayId: speed.ref["@ref"].id})
                             }}>
                           <Button
                             
@@ -190,7 +210,10 @@ import {
               </Flex>)
             )}
           </Box>
+          )}
         </Flex>
+
+        
       </Box>
     );
   }

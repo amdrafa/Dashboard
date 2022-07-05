@@ -26,8 +26,6 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
                 year: 'numeric'
             })
 
-            console.log(createdAt + 'passou aq')
-
             await fauna.query(
                 q.Create(
                     q.Collection('speedways'),
