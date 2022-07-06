@@ -42,6 +42,15 @@
     border-radius: 0.25rem;
 }
 
+.react-modal-delete-message{
+    width: 100%;
+    max-width: 600px;
+    background: #292A36;
+    padding: 1rem;
+    position: relative;
+    border-radius: 0.25rem;
+}
+
 .rdrCalendarWrapper {
     box-sizing: border-box;
     background: #ffffff;

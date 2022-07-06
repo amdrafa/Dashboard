@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   HStack,
+  Icon,
   SimpleGrid,
   Text,
   VStack,
@@ -21,12 +22,15 @@ import { api } from "../services/axios";
 import Router from "next/router";
 import { toast, ToastContainer } from "react-toastify";
 import { useEffect, useState } from "react";
+import { IoMdClose } from "react-icons/io";
+import {FaUnlockAlt} from 'react-icons/fa'
 
 type EditSpeedwayFormData = {
   speedway: string;
   vehicles_limit: number;
   description: string;
   speedwayId: string;
+  speedway_status: string;
   setIsEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
@@ -42,6 +46,7 @@ export default function EditSpeedway({
   vehicles_limit,
   setIsEditMode,
   speedwayId,
+  speedway_status,
 }: EditSpeedwayFormData) {
   const { register, handleSubmit, formState, resetField } = useForm({
     resolver: yupResolver(EditSpeedwayFormSchema),
@@ -68,6 +73,28 @@ export default function EditSpeedway({
         toast.error("Company name already registered");
       });
   };
+
+  async function disableSpeedway(id: string) {
+    await api
+      .post(
+        `disablespeedway`,
+        {},
+        {
+          params: {
+            id,
+          },
+        }
+      )
+      .then((response) => {
+        toast.success("Speedway disabled");
+        setIsModalOpen(false);
+        setIsEditMode(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        toast.error("Something went wrong");
+      });
+  }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -120,74 +147,108 @@ export default function EditSpeedway({
       </VStack>
 
       <Flex mt="8" justify="space-between">
-
-      <Button
-            cursor={"pointer"}
-            onClick={() => {
-              setIsEditMode(false);
-            }}
-            as={"a"}
-            colorScheme="whiteAlpha"
-          >
-            Cancel
-          </Button>
-
-      <Flex>
-        <HStack spacing="4">
         <Button
-            isLoading={formState.isSubmitting}
-            colorScheme="red"
-            onClick={() => setIsModalOpen(true)}
-          >
-            Delete
-          </Button>
-          
+          cursor={"pointer"}
+          onClick={() => {
+            setIsEditMode(false);
+          }}
+          as={"a"}
+          colorScheme="whiteAlpha"
+        >
+          Cancel
+        </Button>
 
-          <Button
-            isLoading={formState.isSubmitting}
-            type="submit"
-            colorScheme="blue"
-          >
-            Save
-          </Button>
-          
-        </HStack>
+        <Flex>
+          <HStack spacing="4">
+            {speedway_status == 'active'? (
+              <Button colorScheme="red" onClick={() => setIsModalOpen(true)}>
+              Disable speedway
+            </Button>
+            ) : (
+              <Button display={'flex'} alignItems={'center'} colorScheme="whiteAlpha" _hover={{bg: 'blue.600'}} onClick={() => setIsModalOpen(true)}>
+                <Icon mr={1.5} as={FaUnlockAlt}/>
+                Unblock speedway
+              </Button>
+            )}
+
+            <Button
+              isLoading={formState.isSubmitting}
+              type="submit"
+              colorScheme="blue"
+            >
+              Save
+            </Button>
+          </HStack>
         </Flex>
       </Flex>
       <Modal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          overlayClassName="react-modal-overlay"
-          className="react-modal-content"
-          ariaHideApp={false}
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        overlayClassName="react-modal-overlay"
+        className="react-modal-delete-message"
+        ariaHideApp={false}
+      >
+        <SimpleGrid
+          flex="1"
+          gap="1"
+          minChildWidth="320px"
+          alignItems="flex-start"
         >
-          <SimpleGrid
-            flex="1"
-            gap="1"
-            minChildWidth="320px"
-            alignItems="flex-start"
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems={"center"}
+            mb={2}
           >
-            <Box display="flex" justifyContent="space-around">
-              <Text>Are u sure</Text>
-            </Box>
-            <Divider mt="-5" orientation="horizontal" />
-            <Box
-              mb="1.5"
-              display="flex"
-              justifyContent="space-between"
-              px="5"
-              alignItems="center"
+            <Text fontSize={"2xl"}>Disable speedway</Text>
+            <Icon
+              fontSize={20}
+              as={IoMdClose}
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+              cursor={"pointer"}
+            />
+          </Box>
+          <Divider orientation="horizontal" />
+
+          <Box my={"4"}>
+            <Text mb={2} fontSize={"md"}>
+              Do you really want to disable this speedway? All appointments
+              schedueled are going to be canceled.
+            </Text>
+            <Text color={"gray.300"} mb={2} fontSize={"md"}>
+              An e-mail will be sent informing that the speedway is temporarily
+              disabled.
+            </Text>
+          </Box>
+
+          <Box
+            mb="1.5"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Button
+              type="submit"
+              onClick={() => setIsModalOpen(false)}
+              bg="green.500"
             >
-             
+              Cancel
+            </Button>
 
-              
-
-              <Button type="submit" onClick={() => setIsModalOpen(false)} bg="green.600">
-                Continue
-              </Button>
-            </Box>
-          </SimpleGrid>
-        </Modal>
+            <Button
+              type="submit"
+              onClick={() => {
+                disableSpeedway(speedwayId);
+              }}
+              bg="red.500"
+            >
+              Disable
+            </Button>
+          </Box>
+        </SimpleGrid>
+      </Modal>
     </Box>
   );
 }

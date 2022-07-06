@@ -29,7 +29,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
             await fauna.query(
                 q.Create(
                     q.Collection('speedways'),
-                    { data: {speedway, vehicles_limit, description, createdAt} }
+                    { data: {speedway, vehicles_limit, description, createdAt, status: 'active'} }
                 )
             )
 

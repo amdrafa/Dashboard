@@ -60,7 +60,7 @@ export default authenticated (async (request: NextApiRequest, response: NextApiR
            
             
             const PaginateData = slicedData()
-            console.log(PaginateData)
+    
             return response.status(200).json({PaginateData, totalcount})
         }catch(err){
             console.log('error when getting all speedways', err)
