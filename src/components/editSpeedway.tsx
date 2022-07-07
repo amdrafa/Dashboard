@@ -96,7 +96,31 @@ export default function EditSpeedway({
       });
   }
 
+  async function enableSpeedway(id: string) {
+    await api
+      .post(
+        `enablespeedway`,
+        {},
+        {
+          params: {
+            id,
+          },
+        }
+      )
+      .then((response) => {
+        toast.success("Speedway active again");
+        setIsEnableModalOpen(false);
+        setIsEditMode(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        toast.error("Something went wrong");
+      });
+  }
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [isEnableModalOpen, setIsEnableModalOpen] = useState(false);
 
   return (
     <Box
@@ -165,7 +189,7 @@ export default function EditSpeedway({
               Disable speedway
             </Button>
             ) : (
-              <Button display={'flex'} alignItems={'center'} colorScheme="whiteAlpha" _hover={{bg: 'blue.600'}} onClick={() => setIsModalOpen(true)}>
+              <Button display={'flex'} alignItems={'center'} colorScheme="whiteAlpha" _hover={{bg: 'blue.600'}} onClick={() => setIsEnableModalOpen(true)}>
                 <Icon mr={1.5} as={FaUnlockAlt}/>
                 Unblock speedway
               </Button>
@@ -245,6 +269,75 @@ export default function EditSpeedway({
               bg="red.500"
             >
               Disable
+            </Button>
+          </Box>
+        </SimpleGrid>
+      </Modal>
+
+
+      <Modal
+        isOpen={isEnableModalOpen}
+        onRequestClose={() => setIsEnableModalOpen(false)}
+        overlayClassName="react-modal-overlay"
+        className="react-modal-delete-message"
+        ariaHideApp={false}
+      >
+        <SimpleGrid
+          flex="1"
+          gap="1"
+          minChildWidth="320px"
+          alignItems="flex-start"
+        >
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems={"center"}
+            mb={2}
+          >
+            <Text fontSize={"2xl"}>Enable speedway</Text>
+            <Icon
+              fontSize={20}
+              as={IoMdClose}
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+              cursor={"pointer"}
+            />
+          </Box>
+          <Divider orientation="horizontal" />
+
+          <Box my={"4"}>
+            <Text mb={2} fontSize={"md"}>
+              Do you really want to enable this speedway? From this moment, anyone will be able to schedule an appointment at this speedway.
+            </Text>
+            <Text color={"gray.300"} mb={2} fontSize={"md"}>
+              An e-mail will be sent informing that the speedway is temporarily
+              disabled.
+            </Text>
+          </Box>
+
+          <Box
+            mb="1.5"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Button
+              type="submit"
+              onClick={() => setIsEnableModalOpen(false)}
+              bg="red.500"
+            >
+              Cancel
+            </Button>
+
+            <Button
+              type="submit"
+              onClick={() => {
+                enableSpeedway(speedwayId);
+              }}
+              bg="green.500"
+            >
+              Enable
             </Button>
           </Box>
         </SimpleGrid>

@@ -29,6 +29,7 @@ import { useQuery } from "react-query";
 import ReactPaginate from 'react-paginate'
 import { parseCookies } from "nookies";
 import { decode } from "jsonwebtoken";
+import EditCompany from "../../components/editCompany";
 
 export type DecodedToken = {
   sub: string;
@@ -40,7 +41,11 @@ export type DecodedToken = {
 
 interface companyDataProps {
   data: companyProps;
-  ref: string;
+  ref: {
+    "@ref": {
+      id: number;
+    };
+  };
   ts: number;
 }
 
@@ -49,12 +54,50 @@ interface companyProps {
   cnpj: string;
   responsable_name: string;
   email: string;
-  companySecretKey: string;
-  createdAt: string;
+  phone: number;
+  avaiableHours: number;
+  companyId: string;
+  createdAt?: string;
 }
 
 
 export default function CompanyList() {
+
+  const [companyId, setCompanyId] = useState("");
+  const [company, setCompany] = useState('');
+  const [cnpj, setCnpj] = useState('false');
+  const [responsable_name, setResponsable_name] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState(0);
+  const [avaiableHours, setAvaiableHours] = useState(0);
+
+  const [isEditMode, setIsEditMode] = useState(false);
+
+  function handleEditCompany({
+    company,
+    cnpj,
+    responsable_name,
+    email,
+    phone,
+    avaiableHours,
+    companyId
+
+  }): companyProps {
+   
+    
+    setCompany(company)
+    setCnpj(cnpj)
+    setResponsable_name(responsable_name)
+    setEmail(email)
+    setPhone(phone)
+    setAvaiableHours(avaiableHours)
+    setCompanyId(companyId)
+    
+
+    setIsEditMode(true);
+
+    return;
+  }
     
   const isWideVersioon = useBreakpointValue({
     base: false,
@@ -67,11 +110,7 @@ export default function CompanyList() {
 
   const [total, setTotal] = useState(1);
 
-  const [needsLessHeight, setNeedsLessHeight] = useState('');
-
   
-
-  const [companies, setCompanies] = useState<companyDataProps[]>([]);
 
   const { data, isLoading, error } = useQuery<companyDataProps[]>(`companylist${page}`, async () => {
     const response = await api.get(`getallcompanies?page=${page}&limit=${limit}`)
@@ -90,7 +129,19 @@ export default function CompanyList() {
       <Flex w="100%" my="6" maxWidth={1600}  mx="auto" px="6">
         <Sidebar />
 
-        <Box flex="1" borderRadius={8} bg="gray.800" height='100%'  p="8" mt={5}>
+        {isEditMode ? (
+          <EditCompany
+          company={company}
+          cnpj={cnpj}
+          responsable_name={responsable_name}
+          phone={phone}
+          avaiableHours={avaiableHours}
+          email={email}
+          companyId={companyId}
+          setIsEditMode={setIsEditMode}
+          />
+        ) : (
+          <Box flex="1" borderRadius={8} bg="gray.800" height='100%'  p="8" mt={5}>
           <Flex mb="8" justify="space-between" align="center">
             <Heading size="lg" fontWeight="normal">
               Company list
@@ -133,12 +184,25 @@ export default function CompanyList() {
                     <Th>CNPJ</Th>
 
                     {isWideVersioon && <Th>Register date</Th>}
-                    <Th w="8"></Th>
+                    <Th w="8">Created by</Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {data.map((company) => (
-                    <Tr key={company.data.companySecretKey}>
+                    <Tr
+                    onClick={() => {
+                      handleEditCompany({
+                        company: company.data.company,
+                        cnpj: company.data.cnpj,
+                        responsable_name: company.data.responsable_name,
+                        email: company.data.email,
+                        phone: company.data.phone,
+                        avaiableHours: company.data.avaiableHours,
+                        companyId: company.ref["@ref"].id
+                      })
+                    }}
+                    _hover={{bg: 'gray.900', color: 'blue.400', transition: '0.2s', cursor: 'pointer'}}
+                    key={company.data.cnpj}>
                       <Td px={["4", "4", "6"]}>
                         <Text>{company.data.company}</Text>
                       </Td>
@@ -156,17 +220,10 @@ export default function CompanyList() {
 
                       {isWideVersioon && <Td>{company.data.createdAt}</Td>}
 
-                      <Td>
-                        <Button
-                          as="a"
-                          size="sm"
-                          fontSize="sm"
-                          colorScheme="gray"
-                          color="gray.900"
-                          leftIcon={<Icon as={RiPencilLine} fontSize="16" />}
-                        >
-                          Edit
-                        </Button>
+                      <Td w={'10rem'}>
+                        <Text>
+                          Rafael Amaro
+                        </Text>
                       </Td>
                     </Tr>
                   ))}
@@ -190,6 +247,7 @@ export default function CompanyList() {
               </Flex>)
           )}
         </Box>
+        )}
       </Flex>
     </Box>   
   );

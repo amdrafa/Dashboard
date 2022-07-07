@@ -57,7 +57,7 @@ export default function Speedwaylist() {
     createdAt,
     description,
     speedwayId,
-    status,
+    status
   }): speedwayProps {
     setSpeedway(speedway);
     setVehiclesLimit(vehicles_limit);
@@ -181,7 +181,7 @@ export default function Speedwaylist() {
                           });
                         }}
                         key={speed.ts}
-                        _hover={{ color: "blue.300", cursor: "pointer" }}
+                        _hover={{ color: "blue.300", cursor: "pointer", bg:'gray.900', transition: '0.2s' }}
                       >
                         <Td px={["4", "4", "6"]}>
                           <Text>{speed.data.speedway}</Text>
@@ -196,11 +196,11 @@ export default function Speedwaylist() {
 
                         <Td>
                           {speed.data.status == "active" ? (
-                            <Text fontWeight={"medium"} color={"green.400"}>
+                            <Text fontWeight={"medium"} color={"blue.400"}>
                               Active
                             </Text>
                           ) : (
-                            <Text fontWeight={"medium"} color={"red.400"} _hover={{fontWeight:'bold'}}>
+                            <Text fontWeight={"medium"} color={"gray.300"} _hover={{fontWeight:'bold'}}>
                               Disabled
                             </Text>
                           )}

@@ -10,7 +10,7 @@ import { api } from "../../services/axios";
 import Router from "next/router";
 import { toast } from "react-toastify";
 
-type CreateUserFormData = {
+type CreateCompanyFormData = {
     company: string;
     cnpj: string;
     responsable_name: string;
@@ -19,7 +19,7 @@ type CreateUserFormData = {
     hours: number;
   }
   
-  const createUserFormSchema = yup.object().shape({
+  const createCompanyFormSchema = yup.object().shape({
     company: yup.string().required(),  
     cnpj: yup.string().required(),
     responsable_name: yup.string().required().min(4, 'Minimum 6 letters.'),
@@ -32,12 +32,12 @@ type CreateUserFormData = {
 export default function CreateCompany(){
 
     const { register, handleSubmit, formState, resetField } = useForm({
-        resolver: yupResolver(createUserFormSchema)
+        resolver: yupResolver(createCompanyFormSchema)
     })
 
     const {errors} = formState
 
-    const handleCreateUser: SubmitHandler<CreateUserFormData> = async ({company, cnpj, responsable_name, email, phone, hours }) => {
+    const handleCreateUser: SubmitHandler<CreateCompanyFormData> = async ({company, cnpj, responsable_name, email, phone, hours }) => {
         
         console.log(company, cnpj, responsable_name, email)
 

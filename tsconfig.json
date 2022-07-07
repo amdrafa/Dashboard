@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/services/server.js"  ],
+, "src/services/server.js", "src/pages/api/disablespeedway"  ],
   "exclude": [
     "node_modules"
   ]
